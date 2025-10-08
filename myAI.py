@@ -13,5 +13,18 @@ Below is all of the data you'll need, and some small examples that you can uncom
 
 
 def myAI(state: GameState) -> Turn:
-    from examples.smartAI import smartAI
-    return smartAI(state)
+    safe = []
+    enemy_bodies = set()
+    for snake in state.enemies:
+        enemy_bodies |= snake.body_set
+    for turn in list(Turn):
+        head = state.snake.get_next_head(turn)
+        if (
+            0 <= head[0] < state.width
+            and 0 <= head[1] < state.height
+            and head not in state.walls
+            and head not in state.snake.body
+            and head not in enemy_bodies
+        ):
+            safe.append(turn)
+    return random.choice(safe)
