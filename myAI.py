@@ -27,4 +27,6 @@ def myAI(state: GameState) -> Turn:
             and head not in enemy_bodies
         ):
             safe.append(turn)
+    if not safe:
+        return Turn.STRAIGHT
     return random.choice(safe)
