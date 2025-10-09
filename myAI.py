@@ -44,7 +44,9 @@ def _move_snake(state: GameState, snake: Snake, turn: Turn) -> bool:
         state.food.remove(next_head)
         # if len(self.food) < self.num_food:
         #     self.spawn_food()
-        # snake.score += 1
+        snake.score += 1
+        if snake is state.snake:
+            state.score += 1
         # self.spawn_wall()
     return True
 
