@@ -7,8 +7,21 @@ from examples.smartAI import smartAI as enemyAI
 
 def myAI(state: GameState) -> Turn:
     possibleStates = {turn: move_snake(state, turn) for turn in Turn}
-    return Turn.STRAIGHT
+    return enemyAI(state)
 
 
 def move_snake(state: GameState, turn: Turn) -> GameState:
+    for i in range(len(state.enemies)):
+        enemy_state = GameState(
+            width = state.width,
+            height = state.height,
+            snake = state.enemies[i],
+            enemies = [state.snake] + [
+                s for s in state.enemies if s != state.enemies[i]
+            ],
+            food = state.food,
+            walls = state.walls,
+            score = state.enemies[i].score
+        )
+        enemyAI(enemy_state)
     return state
