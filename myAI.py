@@ -9,7 +9,7 @@ def myAI(state: GameState) -> Turn:
     return enemyAI(state)
 
 
-def move_snake(state: GameState, turn: Turn) -> GameState:
+def move_snake(state: GameState, turn: Turn):
     for i in range(len(state.enemies)):
         enemy_state = getEnemyGameState(state, i)
         enemy_turn = enemyAI(enemy_state)
