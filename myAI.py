@@ -33,9 +33,10 @@ def _move_snake(state: GameState, snake: Snake, turn: Turn) -> bool:
     if snake is not state.snake:
         all_other_bodies |= state.snake.body_set
     for other_snake in state.enemies:
-        if other_snake is snake:
-            continue
-        all_other_bodies |= other_snake.body_set
+        if other_snake.isAlive:
+            if other_snake is snake:
+                continue
+            all_other_bodies |= other_snake.body_set
     if next_head in all_other_bodies:
         return False
     will_eat = next_head in state.food
@@ -57,7 +58,7 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
         height = state.height,
         snake = state.enemies[enemy_index],
         enemies = [state.snake] + [
-            s for s in state.enemies if s != state.enemies[enemy_index]
+            s for s in state.enemies if s != state.enemies[enemy_index] and s.isAlive
         ],
         food = state.food,
         walls = state.walls,
@@ -67,8 +68,8 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
 
 def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
     moved = _move_snake(state, state.enemies[enemy_index], turn)
+    state.snake.isAlive = moved
     if not moved:
         for pos in list(state.enemies[enemy_index].body):
             state.food.add(pos)
-        del state.enemies[enemy_index]
     return moved
