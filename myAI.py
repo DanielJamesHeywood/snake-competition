@@ -18,7 +18,7 @@ def move_snake(state: GameState, turn: Turn) -> GameState:
         enemy_turn = enemyAI(enemy_state)
     return state
 
-def getEnemyGameState(state: GameState, enemy_index: int):
+def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
     return GameState(
         width = state.width,
         height = state.height,
