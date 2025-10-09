@@ -6,9 +6,6 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    possible_states = {
-        turn: move_snake(state, turn) for turn in Turn
-    }
     return enemyAI(state)
 
 
