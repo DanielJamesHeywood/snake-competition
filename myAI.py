@@ -16,8 +16,7 @@ def move_snake(state: GameState, turn: Turn) -> GameState:
     for i in range(len(state.enemies)):
         enemy_state = getEnemyGameState(state, i)
         enemy_turn = enemyAI(enemy_state)
-        state = move_enemy_snake(state, i, enemy_turn)
-    return state
+        move_enemy_snake(state, i, enemy_turn)
 
 def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
     return GameState(
@@ -32,5 +31,5 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
         score = state.enemies[enemy_index].score
     )
 
-def move_enemy_snake(state: GameState, enemy_index: int, turn: Turn) -> GameState:
-    return state
+def move_enemy_snake(state: GameState, enemy_index: int, turn: Turn):
+    pass
