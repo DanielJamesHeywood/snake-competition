@@ -23,13 +23,13 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
     return GameState(
         width = state.width,
         height = state.height,
-        snake = state.enemies[i],
+        snake = state.enemies[enemy_index],
         enemies = [state.snake] + [
-            s for s in state.enemies if s != state.enemies[i]
+            s for s in state.enemies if s != state.enemies[enemy_index]
         ],
         food = state.food,
         walls = state.walls,
-        score = state.enemies[i].score
+        score = state.enemies[enemy_index].score
     )
 
 def move_enemy_snake(state: GameState, enemy_index: int, turn: Turn) -> GameState:
