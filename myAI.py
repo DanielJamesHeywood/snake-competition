@@ -14,16 +14,19 @@ def myAI(state: GameState) -> Turn:
 
 def move_snake(state: GameState, turn: Turn) -> GameState:
     for i in range(len(state.enemies)):
-        enemy_state = GameState(
-            width = state.width,
-            height = state.height,
-            snake = state.enemies[i],
-            enemies = [state.snake] + [
-                s for s in state.enemies if s != state.enemies[i]
-            ],
-            food = state.food,
-            walls = state.walls,
-            score = state.enemies[i].score
-        )
+        enemy_state = getEnemyGameState(state, i)
         enemy_turn = enemyAI(enemy_state)
     return state
+
+def getEnemyGameState(state: GameState, enemy_index: int):
+    return GameState(
+        width = state.width,
+        height = state.height,
+        snake = state.enemies[i],
+        enemies = [state.snake] + [
+            s for s in state.enemies if s != state.enemies[i]
+        ],
+        food = state.food,
+        walls = state.walls,
+        score = state.enemies[i].score
+    )
