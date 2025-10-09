@@ -6,9 +6,9 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    possibleStates = {turn: moveSnake(state, turn) for turn in Turn}
+    possibleStates = {turn: move_snake(state, turn) for turn in Turn}
     return Turn.STRAIGHT
 
 
-def moveSnake(state: GameState, turn: Turn) -> GameState:
+def move_snake(state: GameState, turn: Turn) -> GameState:
     return state
