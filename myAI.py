@@ -13,10 +13,11 @@ def move_snake(state: GameState, turn: Turn) -> bool:
     moved = _move_snake(state, state.snake, turn)
     state.snake.isAlive = moved
     if moved:
-        for i in reversed(range(len(state.enemies))):
-            enemy_state = getEnemyGameState(state, i)
-            enemy_turn = enemyAI(enemy_state)
-            move_enemy(state, i, enemy_turn)
+        for i in range(len(state.enemies)):
+            if state.enemies[i].isAlive:
+                enemy_state = getEnemyGameState(state, i)
+                enemy_turn = enemyAI(enemy_state)
+                move_enemy(state, i, enemy_turn)
     return moved
 
 
