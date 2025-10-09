@@ -6,4 +6,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
+    leftStates = set()
+    straightStates = set()
+    rightStates = set()
     return Turn.STRAIGHT
