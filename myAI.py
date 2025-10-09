@@ -16,7 +16,7 @@ def move_snake(state: GameState, turn: Turn) -> bool:
         for i in range(len(state.enemies)):
             enemy_state = getEnemyGameState(state, i)
             enemy_turn = enemyAI(enemy_state)
-            move_enemy_snake(state, i, enemy_turn)
+            move_enemy(state, i, enemy_turn)
     return moved
 
 
@@ -38,5 +38,10 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
     )
 
 
-def move_enemy_snake(state: GameState, enemy_index: int, turn: Turn) -> bool:
-    return False
+def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
+    moved = _move_snake(state, state.enemies[enemy_index], turn)
+    if not moved:
+        for pos in list(state.enemies[enemy_index].body):
+            state.food.add(pos)
+        del state.enemies[enemy_index]
+    return moved
