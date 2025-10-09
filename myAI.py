@@ -25,5 +25,5 @@ def move_snake(state: GameState, turn: Turn) -> GameState:
             walls = state.walls,
             score = state.enemies[i].score
         )
-        enemyAI(enemy_state)
+        enemy_turn = enemyAI(enemy_state)
     return state
