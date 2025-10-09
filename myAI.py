@@ -6,6 +6,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
+    state.snake.score = 1 # Testing whether we're passed a shallow or deep copy.
     return enemyAI(state)
 
 
