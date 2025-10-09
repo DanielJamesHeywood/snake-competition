@@ -9,15 +9,16 @@ def myAI(state: GameState) -> Turn:
     return enemyAI(state)
 
 
-def move_snake(state: GameState, turn: Turn):
+def move_snake(state: GameState, turn: Turn) -> bool:
     for i in range(len(state.enemies)):
         enemy_state = getEnemyGameState(state, i)
         enemy_turn = enemyAI(enemy_state)
         move_enemy_snake(state, i, enemy_turn)
+    return True
 
 
-def _move_snake(state: GameState, snake: Snake, turn: Turn):
-    pass
+def _move_snake(state: GameState, snake: Snake, turn: Turn) -> bool:
+    return False
 
 
 def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
@@ -34,5 +35,5 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
     )
 
 
-def move_enemy_snake(state: GameState, enemy_index: int, turn: Turn):
-    pass
+def move_enemy_snake(state: GameState, enemy_index: int, turn: Turn) -> bool:
+    return False
