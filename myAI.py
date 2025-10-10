@@ -43,12 +43,12 @@ def copyGameState(state: GameState) -> GameState:
 
 
 def copySnake(snake: Snake) -> Snake:
-    snake_copy = Snake(0, 0, snake.id)
-    snake_copy.score = snake.score
-    snake_copy.isAlive = snake.isAlive
-    snake_copy.body = snake.body.copy()
-    snake_copy.direction = snake.direction
-    return snake_copy
+    copy = Snake(0, 0, snake.id)
+    copy.score = snake.score
+    copy.isAlive = snake.isAlive
+    copy.body = snake.body.copy()
+    copy.direction = snake.direction
+    return copy
 
 
 def move_snake(state: GameState, turn: Turn) -> bool:
