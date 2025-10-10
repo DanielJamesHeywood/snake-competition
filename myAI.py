@@ -7,19 +7,19 @@ from examples.smartAI import smartAI as enemyAI
 
 def myAI(state: GameState) -> Turn:
     for turn in Turn:
-        state_copy = copy1(state)
+        state_copy = copyGameState(state)
         if move_snake(state_copy, turn):
             pass
     return Turn.STRAIGHT
 
 
-def copy1(state: GameState) -> GameState:
+def copyGameState(state: GameState) -> GameState:
     return GameState(
         width = state.width,
         height = state.height,
-        snake = copy2(state.snake),
+        snake = copySnake(state.snake),
         enemies = [
-            copy2(s) for s in state.enemies
+            copySnake(s) for s in state.enemies
         ],
         food = state.food.copy(),
         walls = state.walls.copy(),
@@ -27,7 +27,7 @@ def copy1(state: GameState) -> GameState:
     )
 
 
-def copy2(snake: Snake) -> Snake:
+def copySnake(snake: Snake) -> Snake:
     snake_copy = Snake(0, 0, snake.id)
     snake_copy.score = snake.score
     snake_copy.isAlive = snake.isAlive
