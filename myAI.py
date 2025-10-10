@@ -12,7 +12,7 @@ def myAI(state: GameState) -> Turn:
         state = copyGameState(state)
         if move_snake(state, turn):
             possible_states[turn].append(state)
-    while possible_states[Turn.LEFT] or possible_states[Turn.STRAIGHT] or possible_states[Turn.RIGHT]:
+    for _ in range(8):
         for turn in Turn:
             new_possible_states = deque()
             for state in possible_states[turn]:
