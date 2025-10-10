@@ -24,6 +24,7 @@ def myAI(state: GameState) -> Turn:
             if possible_state.score > score or (possible_state.score == score and minimum_food_distance_for_state < minimum_food_distance):
                 turn = possible_turn
                 score = possible_state.score
+                minimum_food_distance = minimum_food_distance_for_state
     return turn
 
 
