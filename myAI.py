@@ -16,7 +16,7 @@ def myAI(state: GameState) -> Turn:
     for possible_turn in Turn:
         for possible_state in possible_states:
             if possible_state.score > score:
-                turn = possible_turn:
+                turn = possible_turn
                 score = possible_state.score
     return turn
 
