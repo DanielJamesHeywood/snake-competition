@@ -12,7 +12,7 @@ def myAI(state: GameState) -> Turn:
         if move_snake(state_copy, turn):
             possible_states[turn].append(state_copy)
     turn = Turn.LEFT
-    score = 0
+    score = -1
     for possible_turn in Turn:
         for possible_state in possible_states[possible_turn]:
             if possible_state.score > score:
