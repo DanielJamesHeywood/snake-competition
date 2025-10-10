@@ -6,6 +6,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
+    state.copy()
     return Turn.STRAIGHT
 
 
