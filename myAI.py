@@ -9,7 +9,7 @@ def myAI(state: GameState) -> Turn:
     for turn in Turn:
         state_copy = copyGameState(state)
         if move_snake(state_copy, turn):
-            pass
+            return turn
     return Turn.STRAIGHT
 
 
