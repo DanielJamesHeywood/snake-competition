@@ -11,7 +11,7 @@ def myAI(state: GameState) -> Turn:
         state_copy = copyGameState(state)
         if move_snake(state_copy, turn):
             possible_states[turn].append(state_copy)
-    turn = Turn.LEFT
+    turn = Turn.STRAIGHT
     score = -1
     minimum_food_distance = 0
     for possible_turn in Turn:
