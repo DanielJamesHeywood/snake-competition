@@ -14,7 +14,7 @@ def myAI(state: GameState) -> Turn:
             possible_states[turn].append(state)
     for turn in Turn:
         new_possible_states = deque()
-        for state in possible_states:
+        for state in possible_states[turn]:
             new_possible_states.append(state)
         possible_states[turn] = new_possible_states
     for turn in Turn:
