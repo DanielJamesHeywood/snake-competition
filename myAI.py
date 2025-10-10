@@ -6,6 +6,10 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
+    for turn in Turn:
+        state_copy = copy(state)
+        if move_snake(state_copy, turn):
+            pass
     return Turn.STRAIGHT
 
 
