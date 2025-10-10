@@ -14,7 +14,7 @@ def myAI(state: GameState) -> Turn:
     turn = Turn.LEFT
     score = 0
     for possible_turn in Turn:
-        for possible_state in possible_states:
+        for possible_state in possible_states[possible_turn]:
             if possible_state.score > score:
                 turn = possible_turn
                 score = possible_state.score
