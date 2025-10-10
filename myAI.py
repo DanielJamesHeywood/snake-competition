@@ -9,6 +9,29 @@ def myAI(state: GameState) -> Turn:
     return Turn.STRAIGHT
 
 
+def copy(state: GameState) -> GameState:
+    return GameState(
+        width = state.width,
+        height = state.height,
+        snake = copy(state.snake),
+        enemies = [
+            copy(s) for s in state.enemies
+        ],
+        food = state.food.copy(),
+        walls = state.walls.copy(),
+        score = state.score
+    )
+
+
+def copy(snake: Snake) -> Snake:
+    snake_copy = Snake(0, 0, snake.id)
+    snake_copy.score = snake.score
+    snake_copy.isAlive = snake.isAlive
+    snake_copy.body = snake.body.copy()
+    snake_copy.direction = snake.direction
+    return snake_copy
+
+
 def move_snake(state: GameState, turn: Turn) -> bool:
     moved = _move_snake(state, state.snake, turn)
     state.snake.isAlive = moved
