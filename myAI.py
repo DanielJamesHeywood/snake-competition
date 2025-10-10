@@ -8,9 +8,9 @@ from examples.smartAI import smartAI as enemyAI
 def myAI(state: GameState) -> Turn:
     possible_states = {turn: deque() for turn in Turn}
     for turn in Turn:
-        state = copyGameState(state)
-        if move_snake(state, turn):
-            possible_states[turn].append(state)
+        state_copy = copyGameState(state)
+        if move_snake(state_copy, turn):
+            possible_states[turn].append(state_copy)
     for turn in Turn:
         if possible_states[turn]:
             return turn
