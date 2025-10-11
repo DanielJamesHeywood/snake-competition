@@ -102,7 +102,7 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
 
 def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
     moved = _move_snake(state, state.enemies[enemy_index], turn)
-    state.snake.isAlive = moved
+    state.enemies[enemy_index].isAlive = moved
     if not moved:
         for pos in list(state.enemies[enemy_index].body):
             state.food.add(pos)
