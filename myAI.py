@@ -118,8 +118,7 @@ def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
 
 def get_empty_cells(state: GameState) -> set[(int, int)]:
     all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
-    occupied = state.walls | state.food
-    occupied |= state.snake
+    occupied = state.walls | state.food | state.snake
     for s in state.enemies:
         if s.isAlive:
             occupied |= s.body_set
