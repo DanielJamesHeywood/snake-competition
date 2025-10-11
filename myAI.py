@@ -6,9 +6,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    possible_states = {
-        turn: [] for turn in Turn
-    }
+    possible_states = {turn: [] for turn in Turn}
     for turn in Turn:
         possible_state = copyGameState(state)
         if move_snake(possible_state, turn):
@@ -35,9 +33,7 @@ def copyGameState(state: GameState) -> GameState:
         width = state.width,
         height = state.height,
         snake = copySnake(state.snake),
-        enemies = [
-            copySnake(s) for s in state.enemies
-        ],
+        enemies = [copySnake(s) for s in state.enemies],
         food = state.food.copy(),
         walls = state.walls.copy(),
         score = state.score
@@ -120,9 +116,7 @@ def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
     return moved
 
 def get_empty_cells(state: GameState) -> set:
-    all_cells = {
-        (x, y) for x in range(state.width) for y in range(state.height)
-    }
+    all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
     occupied = state.walls | state.food
     occupied |= state.snake
     for s in state.enemies:
