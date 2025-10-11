@@ -13,11 +13,10 @@ def myAI(state: GameState) -> Turn:
         possible_state = copyGameState(state)
         if move_snake(possible_state, turn):
             possible_states[turn].append(possible_state)
-    _turn = Turn.LEFT
     for turn in Turn:
         for possible_state in possible_states[turn]:
-            _turn = turn
-    return _turn
+            return turn
+    return Turn.LEFT
 
 
 def copyGameState(state: GameState) -> GameState:
