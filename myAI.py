@@ -98,9 +98,7 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
         width = state.width,
         height = state.height,
         snake = state.enemies[enemy_index],
-        enemies = [state.snake] + [
-            s for s in state.enemies if s != state.enemies[enemy_index] and s.isAlive
-        ],
+        enemies = [state.snake] + [s for s in state.enemies if s != state.enemies[enemy_index] and s.isAlive],
         food = state.food,
         walls = state.walls,
         score = state.enemies[enemy_index].score
