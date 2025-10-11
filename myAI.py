@@ -27,7 +27,7 @@ def myAI(state: GameState) -> Turn:
                 optimal_turn = turn
                 optimal_score = possible_state.score
                 optimal_minimum_distance = minimum_distance
-    return Turn.LEFT
+    return optimal_turn
 
 
 def copyGameState(state: GameState) -> GameState:
