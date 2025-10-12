@@ -15,6 +15,7 @@ def myAI(state: GameState) -> Turn:
     best_turn = None
     best__3 = None
     best_score = None
+    best_minimum_distance = None
     for turn in Turn:
         for possible_state in possible_states[turn]:
             head = get_head(possible_state.snake)
@@ -32,10 +33,16 @@ def myAI(state: GameState) -> Turn:
                         _2.append(next_pos)
                     if next_pos == tail:
                         _3 = True
-            if not best_turn or (_3 and not best__3) or (_3 == best__3 and possible_state.score > best_score):
+            minimum_distance = possible_state.width + possible_state.height
+            for food in possible_state.food:
+                distance = abs(food[0] - possible_state.snake.head[0]) + abs(food[1] - possible_state.snake.head[1])
+                if not minimum_distance or distance < minimum_distance:
+                    minimum_distance = distance
+            if not best_turn or (_3 and not best__3) or (_3 == best__3 and (possible_state.score > best_score or (possible_state.score == best_score and minimum_distance < best_minimum_distance))):
                 best_turn = turn
                 best__3 = _3
                 best_score = possible_state.score
+                best_minimum_distance = minimum_distance
     return best_turn if best_turn else Turn.LEFT
 
 
