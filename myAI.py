@@ -9,12 +9,14 @@ def myAI(state: GameState) -> Turn:
     return Turn.LEFT
 
 
-def turns(state: GameState, : set[(int, int)]) -> list[Turn] | None:
-    queue = deque([(state.snake.head, state.snake.direction, [])])
+def get_turns_to_cell_in_cells(state: GameState, cells: set[(int, int)]) -> list[Turn] | None:
+    queue = deque([[]])
     while queue:
-        position, turns = queue.popleft()
-        if position in:
+        turns = queue.popleft()
+        if position in cells:
             return turns
+        for turn in Turn:
+            pass
     return None
 
 
