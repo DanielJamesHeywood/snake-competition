@@ -32,9 +32,9 @@ def copyGameState(state: GameState) -> GameState:
     return GameState(
         width = state.width,
         height = state.height,
-        snake = copySnake(state.snake),
+        snake = copy_snake(state.snake),
         enemies = [
-            copySnake(s) for s in state.enemies
+            copy_snake(s) for s in state.enemies
         ],
         food = state.food.copy(),
         walls = state.walls.copy(),
