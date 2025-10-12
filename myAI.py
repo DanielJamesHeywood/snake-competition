@@ -16,6 +16,8 @@ def myAI(state: GameState) -> Turn:
             {get_head(possible_state.snake)}
             tail = get_tail(possible_state.snake)
             empty_cells = get_empty_cells(possible_state)
+            for dx, dy in DIRECTIONS:
+                pass
     return Turn.STRAIGHT
 
 
