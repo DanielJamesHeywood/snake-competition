@@ -11,6 +11,11 @@ def myAI(state: GameState) -> Turn:
         possible_state = copyGameState(state)
         if move_snake(possible_state, turn):
             possible_states[turn].append(possible_state)
+    for turn in Turn:
+        for possible_state in possible_states[turn]:
+            {get_head(possible_state.snake)}
+            tail = get_tail(possible_state.snake)
+            empty_cells = get_empty_cells(possible_state)
     return Turn.STRAIGHT
 
 
