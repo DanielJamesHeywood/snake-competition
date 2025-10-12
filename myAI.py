@@ -2,6 +2,7 @@ import random
 from collections import deque
 from snake.logic import GameState, Turn, Snake, Direction
 
+from snake.logic import DIRECTIONS
 from examples.smartAI import smartAI as enemyAI
 
 
@@ -9,14 +10,30 @@ def myAI(state: GameState) -> Turn:
     return Turn.LEFT
 
 
+def get_empty_cells(state: GameState) -> set[(int, int)]:
+    all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
+    occupied = state.walls | state.food | state.snake.body_set
+    for enemy in state.enemies:
+        if enemy.isAlive:
+            occupied |= enemy.body_set
+    return all_cells - occupied
+
+
 def get_turns_to_cell_in_cells(state: GameState, cells: set[(int, int)]) -> list[Turn] | None:
-    queue = deque([[]])
+    empty = get_empty_cells(state)
+    visited = set()
+    queue = deque([(state.snake.head, state.snake.direction, [])])
     while queue:
-        turns = queue.popleft()
-        if position in cells:
-            return turns
+        position, direction, turns = queue.popleft()
         for turn in Turn:
-            pass
+            new_direction = (direction + turn.value) % 4
+            dx, dy = DIRECTIONS[new_direction]
+            new_position = (position[0] + dx, position[1] + dy)
+            if new_position in cells:
+                return turns + [turn]
+            if new_position in empty | state.food and new_position not in visited:
+                visited.add(new_position)
+                queue.append((new_position, new_direction, turns + [turn]))
     return None
 
 
@@ -108,20 +125,3 @@ def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
         for position in list(state.enemies[enemy_index].body):
             state.food.add(position)
     return moved
-
-
-def get_head(snake: Snake) -> (int, int):
-    return snake.body[0]
-
-
-def get_tail(snake: Snake) -> (int, int):
-    return snake.body[-1]
-
-
-def get_empty_cells(state: GameState) -> set[(int, int)]:
-    all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
-    occupied = state.walls | state.food | state.snake.body_set
-    for s in state.enemies:
-        if s.isAlive:
-            occupied |= s.body_set
-    return all_cells - occupied
