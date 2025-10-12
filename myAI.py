@@ -118,6 +118,10 @@ def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
     return moved
 
 
+def get_tail(snake: Snake) -> (int, int):
+    return snake.body[-1]
+
+
 def get_empty_cells(state: GameState) -> set[(int, int)]:
     all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
     occupied = state.walls | state.food | state.snake.body_set
