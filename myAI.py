@@ -9,6 +9,15 @@ def myAI(state: GameState) -> Turn:
     return Turn.LEFT
 
 
+def turns(state: GameState, : set[(int, int)]) -> list[Turn] | None:
+    queue = deque([(state.snake.head, state.snake.direction, [])])
+    while queue:
+        position, turns = queue.popleft()
+        if position in:
+            return turns
+    return None
+
+
 def copyGameState(state: GameState) -> GameState:
     return GameState(
         width = state.width,
