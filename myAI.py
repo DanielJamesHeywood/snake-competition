@@ -10,15 +10,6 @@ def myAI(state: GameState) -> Turn:
     return Turn.LEFT
 
 
-def get_empty_cells(state: GameState) -> set[(int, int)]:
-    all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
-    occupied = state.walls | state.food | state.snake.body_set
-    for enemy in state.enemies:
-        if enemy.isAlive:
-            occupied |= enemy.body_set
-    return all_cells - occupied
-
-
 def get_turns_to_cell_in_cells(state: GameState, cells: set[(int, int)]) -> list[Turn] | None:
     empty = get_empty_cells(state)
     visited = set()
@@ -35,6 +26,15 @@ def get_turns_to_cell_in_cells(state: GameState, cells: set[(int, int)]) -> list
                 visited.add(new_position)
                 queue.append((new_position, new_direction, turns + [turn]))
     return None
+
+
+def get_empty_cells(state: GameState) -> set[(int, int)]:
+    all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
+    occupied = state.walls | state.food | state.snake.body_set
+    for enemy in state.enemies:
+        if enemy.isAlive:
+            occupied |= enemy.body_set
+    return all_cells - occupied
 
 
 def copyGameState(state: GameState) -> GameState:
