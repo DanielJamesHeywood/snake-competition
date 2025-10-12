@@ -7,43 +7,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    possible_states = {turn: [] for turn in Turn}
-    for turn in Turn:
-        possible_state = copyGameState(state)
-        if move_snake(possible_state, turn):
-            possible_states[turn].append(possible_state)
-    best_turn = None
-    best__3 = None
-    best_score = None
-    best_minimum_distance = None
-    for turn in Turn:
-        for possible_state in possible_states[turn]:
-            head = get_head(possible_state.snake)
-            tail = get_tail(possible_state.snake)
-            empty_cells = get_empty_cells(possible_state)
-            _1 = {head}
-            _2 = deque([head])
-            _3 = False
-            while _2 and not _3:
-                pos = _2.popleft()
-                for dx, dy in DIRECTIONS:
-                    next_pos = (pos[0] + dx, pos[1] + dy)
-                    if (next_pos in empty_cells | possible_state.food) and next_pos not in _1:
-                        _1.add(next_pos)
-                        _2.append(next_pos)
-                    if next_pos == tail:
-                        _3 = True
-            minimum_distance = possible_state.width + possible_state.height
-            for food in possible_state.food:
-                distance = abs(food[0] - possible_state.snake.head[0]) + abs(food[1] - possible_state.snake.head[1])
-                if not minimum_distance or distance < minimum_distance:
-                    minimum_distance = distance
-            if not best_turn or (_3 and not best__3) or (_3 == best__3 and (possible_state.score > best_score or (possible_state.score == best_score and minimum_distance < best_minimum_distance))):
-                best_turn = turn
-                best__3 = _3
-                best_score = possible_state.score
-                best_minimum_distance = minimum_distance
-    return best_turn if best_turn else Turn.LEFT
+    return Turn.LEFT
 
 
 def copyGameState(state: GameState) -> GameState:
