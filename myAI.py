@@ -7,7 +7,8 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    return Turn.LEFT
+    turns = get_turns_to_cell_in_cells(state, state.food)
+    return turns[0] if turns else Turn.LEFT
 
 
 def get_turns_to_cell_in_cells(state: GameState, cells: set[(int, int)]) -> list[Turn] | None:
