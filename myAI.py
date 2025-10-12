@@ -118,6 +118,10 @@ def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
     return moved
 
 
+def get_head(snake: Snake) -> (int, int):
+    return snake.body[0]
+
+
 def get_tail(snake: Snake) -> (int, int):
     return snake.body[-1]
 
