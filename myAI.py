@@ -42,7 +42,7 @@ def copyGameState(state: GameState) -> GameState:
     )
 
 
-def copySnake(snake: Snake) -> Snake:
+def copy_snake(snake: Snake) -> Snake:
     copy = Snake(0, 0, snake.id)
     copy.score = snake.score
     copy.isAlive = snake.isAlive
