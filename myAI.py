@@ -23,11 +23,12 @@ def myAI(state: GameState) -> Turn:
             _1 = {head}
             _2 = deque([head])
             _3 = False
-            while _2 and _3:
+            while _2 and not _3:
                 pos = _2.popleft()
                 for dx, dy in DIRECTIONS:
                     next_pos = (pos[0] + dx, pos[1] + dy)
                     if (next_pos in empty_cells | possible_state.food) and next_pos not in _1:
+                        _1.add(next_pos)
                         _2.append(next_pos)
                     if next_pos == tail:
                         _3 = True
