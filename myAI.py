@@ -15,7 +15,7 @@ def copyGameState(state: GameState) -> GameState:
         height = state.height,
         snake = copy_snake(state.snake),
         enemies = [
-            copy_snake(s) for s in state.enemies
+            copy_snake(enemy) for enemy in state.enemies
         ],
         food = state.food.copy(),
         walls = state.walls.copy(),
@@ -36,11 +36,11 @@ def move_snake(state: GameState, turn: Turn) -> bool:
     moved = _move_snake(state, state.snake, turn)
     state.snake.isAlive = moved
     if moved:
-        for i in range(len(state.enemies)):
-            if state.enemies[i].isAlive:
-                enemy_state = getEnemyGameState(state, i)
+        for index in range(len(state.enemies)):
+            if state.enemies[index].isAlive:
+                enemy_state = getEnemyGameState(state, index)
                 enemy_turn = enemyAI(enemy_state)
-                move_enemy(state, i, enemy_turn)
+                move_enemy(state, index, enemy_turn)
     return moved
 
 
@@ -82,7 +82,7 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
         height = state.height,
         snake = state.enemies[enemy_index],
         enemies = [state.snake] + [
-            s for s in state.enemies if s != state.enemies[enemy_index] and s.isAlive
+            enemy for enemy in state.enemies if enemy != state.enemies[enemy_index] and enemy.isAlive
         ],
         food = state.food,
         walls = state.walls,
@@ -94,8 +94,8 @@ def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
     moved = _move_snake(state, state.enemies[enemy_index], turn)
     state.enemies[enemy_index].isAlive = moved
     if not moved:
-        for pos in list(state.enemies[enemy_index].body):
-            state.food.add(pos)
+        for position in list(state.enemies[enemy_index].body):
+            state.food.add(position)
     return moved
 
 
