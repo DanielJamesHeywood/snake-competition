@@ -108,6 +108,6 @@ def getDistanceToNearestFood(state: GameState) -> int | None:
     distanceToNearestFood = None
     for food in state.food:
         distanceToFood = abs(food[0] - state.snake.head[0]) + abs(food[1] - state.snake.head[1])
-        if distanceToFood < distanceToNearestFood:
+        if not distanceToNearestFood or distanceToFood < distanceToNearestFood:
             distanceToNearestFood = distanceToFood
     return distanceToNearestFood
