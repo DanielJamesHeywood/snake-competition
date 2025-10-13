@@ -55,6 +55,8 @@ def myAI(state: GameState) -> Turn:
                                     break
                             if not inserted:
                                 otherQueue.insert(0, (newOtherState, minimumDistanceToTail))
+                if otherQueue:
+                    return turn
             insert(queue, (newState, turn, 1, minimumDistancesToNearestFood[newState.snake.head] + 1))
     while queue and len(queue) < 256:
         state, firstTurn, distance, minimumDistanceToNearestFood = queue.pop()
@@ -94,6 +96,8 @@ def myAI(state: GameState) -> Turn:
                                         break
                                 if not inserted:
                                     otherQueue.insert(0, (newOtherState, minimumDistanceToTail))
+                    if otherQueue:
+                        return turn
                 insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return queue[-1][1] if queue else Turn.STRAIGHT
 
