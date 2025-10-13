@@ -36,7 +36,7 @@ def myAI(state: GameState) -> Turn:
                 if newState.score > state.score:
                     return firstTurn
                 insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
-    return Turn.STRAIGHT
+    return queue[-1] if queue else Turn.STRAIGHT
 
 
 def copyGameState(state: GameState) -> GameState:
