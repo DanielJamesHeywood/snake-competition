@@ -14,9 +14,7 @@ def myAI(state: GameState) -> Turn:
     while queue:
         state, turn = queue.popleft()
         for newTurn in Turn:
-            newState = state
-            if newTurn == Turn.RIGHT:
-                newState = copyGameState(newState)
+            newState = state if newTurn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, newTurn):
                 if newState.score > state.score:
                     return turn
