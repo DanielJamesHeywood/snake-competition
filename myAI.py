@@ -29,12 +29,13 @@ def myAI(state: GameState) -> Turn:
             insert(queue, (newState, turn, turn, 1, minimumDistancesToNearestFood[newState.snake.head] + 1))
     while queue:
         state, firstTurn, lastTurn, distance, minimumDistanceToNearestFood = queue.popleft()
+        newDistance = distance + 1
         for turn in Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
                 if newState.score > state.score:
                     return firstTurn
-                insert(queue, (newState, firstTurn, turn, distance + 1, minimumDistancesToNearestFood[newState.snake.head] + distance + 1))
+                insert(queue, (newState, firstTurn, turn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return Turn.STRAIGHT
 
 
