@@ -73,12 +73,13 @@ def copySnake(snake: Snake) -> Snake:
 
 
 def moveSnake(state: GameState, turn: Turn) -> bool:
-    state.snake.isAlive = moveAnySnake(state, state.snake, turn)
-    if state.snake.isAlive:
+    moved = moveAnySnake(state, state.snake, turn)
+    state.snake.isAlive = moved
+    if moved:
         for index in range(len(state.enemies)):
             if state.enemies[index].isAlive:
                 moveEnemy(state, index, enemyAI(getEnemyGameState(state, index)))
-    return state.snake.isAlive
+    return moved
 
 
 def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
