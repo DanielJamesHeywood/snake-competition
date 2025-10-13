@@ -60,13 +60,12 @@ def copySnake(snake: Snake) -> Snake:
 
 
 def moveSnake(state: GameState, turn: Turn) -> bool:
-    moved = moveAnySnake(state, state.snake, turn)
-    state.snake.isAlive = moved
-    if moved:
+    state.snake.isAlive = moveAnySnake(state, state.snake, turn)
+    if state.snake.isAlive:
         for index in range(len(state.enemies)):
             if state.enemies[index].isAlive:
                 moveEnemy(state, index, enemyAI(getEnemyGameState(state, index)))
-    return moved
+    return state.snake.isAlive
 
 
 def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
@@ -75,16 +74,16 @@ def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
         return False
     if not (0 <= nextHead[0] < state.width and 0 <= nextHead[1] < state.height):
         return False
-    if nextHead in snake.body and not nextHead == snake.body[-1]:
+    if nextHead in snake.body and nextHead != snake.body[-1]:
         return False
     if snake is not state.snake and nextHead in state.snake.body:
         return False
-    for other_snake in state.enemies:
-        if other_snake is not snake and other_snake.isAlive and nextHead in other_snake.body:
+    for enemy in state.enemies:
+        if enemy is not snake and enemy.isAlive and nextHead in enemy.body:
             return False
-    growing = nextHead in state.food
-    snake.move(turn, grow = growing)
-    if growing:
+    willEat = nextHead in state.food
+    snake.move(turn, grow = willEat)
+    if willEat:
         state.food.remove(nextHead)
         snake.score += 1
         if snake is state.snake:
@@ -93,12 +92,11 @@ def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
 
 def moveEnemy(state: GameState, enemyIndex: int, turn: Turn) -> bool:
     enemy = state.enemies[enemyIndex]
-    moved = moveAnySnake(state, enemy, turn)
-    enemy.isAlive = moved
-    if not moved:
+    enemy.isAlive = moveAnySnake(state, enemy, turn)
+    if not enemy.isAlive:
         for position in enemy.body:
             state.food.add(position)
-    return moved
+    return enemy.isAlive
 
 
 def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
