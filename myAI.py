@@ -97,7 +97,7 @@ def myAI(state: GameState) -> Turn:
                                 if not inserted:
                                     otherQueue.insert(0, (newOtherState, minimumDistanceToTail))
                     if otherQueue:
-                        return turn
+                        return firstTurn
                 insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return queue[-1][1] if queue else Turn.STRAIGHT
 
