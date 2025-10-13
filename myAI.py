@@ -11,7 +11,7 @@ def myAI(state: GameState) -> Turn:
     return turns[0] if turns else Turn.LEFT
 
 
-def get_turns_to_cell_in_cells(state: GameState, cells: set[tuple[int, int]]) -> list[Turn] | None:
+def get_turns_to_cell_in_cells(state: GameState, cells: set[tuple[int, int]]) -> Optional[list[Turn]]:
     empty = get_empty_cells(state)
     visited = set()
     queue = deque([(state.snake.head, state.snake.direction, [])])
