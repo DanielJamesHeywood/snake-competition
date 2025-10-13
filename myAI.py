@@ -115,14 +115,13 @@ def moveEnemy(state: GameState, enemyIndex: int, turn: Turn) -> bool:
 
 
 def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
+    enemy = state.enemies[enemyIndex]
     return GameState(
         width = state.width,
         height = state.height,
-        snake = state.enemies[enemyIndex],
-        enemies = [state.snake] + [
-            enemy for enemy in state.enemies if enemy is not state.enemies[enemyIndex] and enemy.isAlive
-        ],
+        snake = enemy,
+        enemies = [state.snake] + [otherEnemy for otherEnemy in state.enemies if otherEnemy is not enemy and otherEnemy.isAlive],
         food = state.food,
         walls = state.walls,
-        score = state.enemies[enemyIndex].score
+        score = enemy.score
     )
