@@ -37,23 +37,23 @@ def myAI(state: GameState) -> Turn:
                                 minimumDistancesToTail[newPosition] = minimumDistanceToTail
                                 queue2.append(newPosition)
                 queue2 = [(newState, minimumDistancesToTail[newState.snake.head])]
-                while queue2 and len(queue2) < 256:
+                while queue2 and len(queue2) < 1024:
                     state2, minimumDistanceToTail = queue2.pop()
                     for turn2 in Turn:
                         newState2 = state2 if turn2 == Turn.RIGHT else copyGameState(state2)
                         if moveSnake(newState2, turn2):
-                            minimumDistancesToTail = minimumDistancesToTail[newState2.snake.head]
-                            if minimumDistancesToTail == 0:
+                            minimumDistanceToTail = minimumDistancesToTail[newState2.snake.head]
+                            if minimumDistanceToTail == 0:
                                 return turn
                             inserted = False
                             for index in reversed(range(len(queue2))):
                                 otherElement = queue2[index]
-                                if minimumDistancesToTail <= otherElement[1]:
-                                    queue2.insert(index + 1, element)
+                                if minimumDistanceToTail <= otherElement[1]:
+                                    queue2.insert(index + 1, (newState2, minimumDistanceToTail))
                                     inserted = True
                                     break
                             if not inserted:
-                                queue.insert(0, element)
+                                queue2.insert(0, (newState2, minimumDistanceToTail))
                 if queue2:
                     return turn
             insert(queue, (newState, turn, 1, minimumDistancesToNearestFood[newState.snake.head] + 1))
@@ -77,23 +77,23 @@ def myAI(state: GameState) -> Turn:
                                     minimumDistancesToTail[newPosition] = minimumDistanceToTail
                                     queue2.append(newPosition)
                     queue2 = [(newState, minimumDistancesToTail[newState.snake.head])]
-                    while queue2 and len(queue2) < 256:
+                    while queue2 and len(queue2) < 1024:
                         state2, minimumDistanceToTail = queue2.pop()
                         for turn2 in Turn:
                             newState2 = state2 if turn2 == Turn.RIGHT else copyGameState(state2)
                             if moveSnake(newState2, turn2):
-                                minimumDistancesToTail = minimumDistancesToTail[newState2.snake.head]
-                                if minimumDistancesToTail == 0:
+                                minimumDistanceToTail = minimumDistancesToTail[newState2.snake.head]
+                                if minimumDistanceToTail == 0:
                                     return turn
                                 inserted = False
                                 for index in reversed(range(len(queue2))):
                                     otherElement = queue2[index]
-                                    if minimumDistancesToTail <= otherElement[1]:
-                                        queue2.insert(index + 1, element)
+                                    if minimumDistanceToTail <= otherElement[1]:
+                                        queue2.insert(index + 1, (newState2, minimumDistanceToTail))
                                         inserted = True
                                         break
                                 if not inserted:
-                                    queue.insert(0, element)
+                                    queue2.insert(0, (newState2, minimumDistanceToTail))
                     if queue2:
                         return firstTurn
                 insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
