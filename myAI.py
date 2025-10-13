@@ -7,20 +7,21 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    score = state.score
     queue = deque()
-    for possible_turn in Turn:
-        state_copy = copyGameState(state)
-        if move_snake(state_copy, possible_turn):
-            queue.append((state_copy, possible_turn))
+    for turn in Turn:
+        new_state = copyGameState(state)
+        if move_snake(new_state, turn):
+            if new_state.score > state.score:
+                return turn
+            queue.append((new_state, turn))
     while queue:
         state, turn = queue.popleft()
-        if state.score > score:
-            return turn
-        for possible_turn in Turn:
-            state_copy = copyGameState(state)
-            if move_snake(state_copy, possible_turn):
-                queue.append((state_copy, turn))
+        for new_turn in Turn:
+            new_state = copyGameState(state)
+            if move_snake(new_state, new_turn):
+                if new_state.score > state.score:
+                    return turn
+                queue.append((new_state, turn))
     return Turn.STRAIGHT
 
 
