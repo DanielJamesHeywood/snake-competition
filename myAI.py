@@ -14,7 +14,6 @@ def myAI(state: GameState) -> Turn:
         minimumDistanceToNearestFood = minimumDistancesToNearestFood[position] + 1
         for xOffset, yOffset in DIRECTIONS:
             newX, newY = position[0] + xOffset, position[1] + yOffset
-            newPosition = (newX, newY)
             if 0 <= newX < state.width and 0 <= newY < state.height:
                 newPosition = (newX, newY)
                 if newPosition not in state.walls and newPosition not in minimumDistancesToNearestFood:
