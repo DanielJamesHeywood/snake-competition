@@ -4,13 +4,16 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    queue = deque()
+    states = {
+        turn: set() for turn in Turn
+    }
     for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            queue.append((newState, turn))
+            states[turn].add((newState, 1, ))
+    while any(states):
     while queue:
         state, turn = queue.popleft()
         for newTurn in Turn:
@@ -99,3 +102,12 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
         walls = state.walls,
         score = state.enemies[enemy_index].score
     )
+
+
+def getDistanceToNearestFood(state: GameState) -> int | None:
+    distanceToNearestFood = None
+    for food in state.food:
+        distanceToFood = abs(food[0] - state.snake.head[0]) + abs(food[1] - state.snake.head[1])
+        if distanceToFood < distanceToNearestFood:
+            distanceToNearestFood = distanceToFood
+    return distanceToNearestFood
