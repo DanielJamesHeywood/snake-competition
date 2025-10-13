@@ -7,35 +7,21 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    turns = get_turns_to_cell_in_cells(state, state.food)
-    return turns[0] if turns else Turn.LEFT
-
-
-def get_turns_to_cell_in_cells(state: GameState, cells: set[tuple[int, int]]) -> list[Turn] | None:
-    empty = get_empty_cells(state)
-    visited = set()
-    queue = deque([(state.snake.head, state.snake.direction, [])])
+    score = state.score
+    queue = deque()
+    for possible_turn in Turn:
+        state_copy = copyGameState(state)
+        if move_snake(state_copy, possible_turn):
+            queue.append((state_copy, possible_turn))
     while queue:
-        position, direction, turns = queue.popleft()
-        for turn in Turn:
-            new_direction = (direction + turn.value) % 4
-            dx, dy = DIRECTIONS[new_direction]
-            new_position = (position[0] + dx, position[1] + dy)
-            if new_position in cells:
-                return turns + [turn]
-            if (new_position in empty or new_position in state.food) and new_position not in visited:
-                visited.add(new_position)
-                queue.append((new_position, new_direction, turns + [turn]))
-    return None
-
-
-def get_empty_cells(state: GameState) -> set[tuple[int, int]]:
-    all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
-    occupied = state.walls | state.food | state.snake.body_set
-    for enemy in state.enemies:
-        if enemy.isAlive:
-            occupied |= enemy.body_set
-    return all_cells - occupied
+        state, turn = queue.popleft()
+        if state.score > score:
+            return turn
+        for possible_turn in Turn:
+            state_copy = copyGameState(state)
+            if move_snake(state_copy, possible_turn):
+                queue.append((state_copy, turn))
+    return Turn.LEFT
 
 
 def copyGameState(state: GameState) -> GameState:
