@@ -63,18 +63,14 @@ def _move_snake(state: GameState, snake: Snake, turn: Turn) -> bool:
         return False
     if next_head in snake.body and not next_head == -1:
         return False
-    if snake is not state.snake:
-        if next_head in state.snake.body:
-            return False
+    if snake is not state.snake and next_head in state.snake.body:
+        return False
     for other_snake in state.enemies:
-        if other_snake.isAlive:
-            if other_snake is snake:
-                continue
-            if next_head in other_snake.body:
-                return False
-    will_eat = next_head in state.food
-    snake.move(turn, grow = will_eat)
-    if will_eat:
+        if other_snake is not snake and other_snake.isAlive and next_head in other_snake.body:
+            return False
+    growing = next_head in state.food
+    snake.move(turn, grow = growing)
+    if growing:
         state.food.remove(next_head)
         # if len(self.food) < self.num_food:
         #     self.spawn_food()
