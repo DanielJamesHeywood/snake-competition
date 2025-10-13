@@ -116,7 +116,7 @@ def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
 
 def insert(queue: deque[tuple[GameState, Turn, Turn, int, int]], element: tuple[GameState, Turn, Turn, int, int]):
     for index, otherElement in enumerate(queue):
-        if element[4] >= otherElement[4] and element[3] <= otherElement[3]:
+        if element[4] >= otherElement[4] and element[3] <= otherElement[3] and otherElement[2] != Turn.STRAIGHT:
             queue.insert(index, element)
             return
     queue.append(element)
