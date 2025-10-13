@@ -21,7 +21,7 @@ def myAI(state: GameState) -> Turn:
             state_copy = copyGameState(state)
             if move_snake(state_copy, possible_turn):
                 queue.append((state_copy, turn))
-    return Turn.LEFT
+    return Turn.STRAIGHT
 
 
 def copyGameState(state: GameState) -> GameState:
