@@ -5,14 +5,14 @@ from examples.smartAI import smartAI as enemyAI
 
 def myAI(state: GameState) -> Turn:
     states = {
-        turn: set() for turn in Turn
+        turn: [] for turn in Turn
     }
     for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            states[turn].add((newState, 1, getDistanceToNearestFood(newState) + 1))
+            states[turn].append((newState, 1, getDistanceToNearestFood(newState) + 1))
     while any(states):
         turnForMinimum = None
         stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood = None, None, None
@@ -21,13 +21,14 @@ def myAI(state: GameState) -> Turn:
                 if minimumDistanceToNearestFood is None or distanceToNearestFood < minimumDistanceToNearestFood or (distanceToNearestFood == minimumDistanceToNearestFood and distance > distanceForMinimum):
                     turnForMinimum = turn
                     stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood = state, distance, distanceToNearestFood
+        states[turnForMinimum].remove((stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood))
         for newTurn in Turn:
             newState = stateForMinimum if newTurn == Turn.RIGHT else copyGameState(stateForMinimum)
             if moveSnake(newState, newTurn):
                 if newState.score > state.score:
                     return turnForMinimum
                 newDistanceForMinimum = distanceForMinimum + 1
-                states[turnForMinimum].add((newState, newDistanceForMinimum, getDistanceToNearestFood(newState) + newDistanceForMinimum))
+                states[turnForMinimum].append((newState, newDistanceForMinimum, getDistanceToNearestFood(newState) + newDistanceForMinimum))
     return Turn.STRAIGHT
 
 
