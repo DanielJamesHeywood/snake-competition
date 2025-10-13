@@ -77,6 +77,13 @@ def moveSnake(state: GameState, snake: Snake, turn: Turn) -> bool:
         # self.spawn_wall()
     return True
 
+def moveEnemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
+    state.enemies[enemy_index].isAlive = moveSnake(state, state.enemies[enemy_index], turn)
+    if not state.enemies[enemy_index].isAlive:
+        for position in state.enemies[enemy_index].body:
+            state.food.add(position)
+    return state.enemies[enemy_index].isAlive
+
 
 def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
     return GameState(
@@ -88,11 +95,3 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
         walls = state.walls,
         score = state.enemies[enemy_index].score
     )
-
-
-def moveEnemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
-    state.enemies[enemy_index].isAlive = moveSnake(state, state.enemies[enemy_index], turn)
-    if not state.enemies[enemy_index].isAlive:
-        for position in state.enemies[enemy_index].body:
-            state.food.add(position)
-    return state.enemies[enemy_index].isAlive
