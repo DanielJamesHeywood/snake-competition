@@ -30,9 +30,7 @@ def copyGameState(state: GameState) -> GameState:
         width = state.width,
         height = state.height,
         snake = copy_snake(state.snake),
-        enemies = [
-            copy_snake(enemy) for enemy in state.enemies
-        ],
+        enemies = [copy_snake(enemy) for enemy in state.enemies],
         food = state.food.copy(),
         walls = state.walls.copy(),
         score = state.score
@@ -49,15 +47,12 @@ def copy_snake(snake: Snake) -> Snake:
 
 
 def move_snake(state: GameState, turn: Turn) -> bool:
-    moved = _move_snake(state, state.snake, turn)
-    state.snake.isAlive = moved
-    if moved:
+    state.snake.isAlive = _move_snake(state, state.snake, turn)
+    if state.snake.isAlive:
         for index in range(len(state.enemies)):
             if state.enemies[index].isAlive:
-                enemy_state = getEnemyGameState(state, index)
-                enemy_turn = enemyAI(enemy_state)
-                move_enemy(state, index, enemy_turn)
-    return moved
+                move_enemy(state, index, enemyAI(getEnemyGameState(state, index)))
+    return state.snake.isAlive
 
 
 def _move_snake(state: GameState, snake: Snake, turn: Turn) -> bool:
@@ -66,19 +61,17 @@ def _move_snake(state: GameState, snake: Snake, turn: Turn) -> bool:
         return False
     if not (0 <= next_head[0] < state.width and 0 <= next_head[1] < state.height):
         return False
-    body_without_tail = list(snake.body)[:-1]
-    if next_head in body_without_tail:
+    if next_head in snake.body and not next_head == -1:
         return False
-    all_other_bodies = set()
     if snake is not state.snake:
-        all_other_bodies |= state.snake.body_set
+        if next_head in state.snake.body:
+            return False
     for other_snake in state.enemies:
         if other_snake.isAlive:
             if other_snake is snake:
                 continue
-            all_other_bodies |= other_snake.body_set
-    if next_head in all_other_bodies:
-        return False
+            if next_head in other_snake.body:
+                return False
     will_eat = next_head in state.food
     snake.move(turn, grow = will_eat)
     if will_eat:
@@ -97,9 +90,7 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
         width = state.width,
         height = state.height,
         snake = state.enemies[enemy_index],
-        enemies = [state.snake] + [
-            enemy for enemy in state.enemies if enemy != state.enemies[enemy_index] and enemy.isAlive
-        ],
+        enemies = [state.snake] + [enemy for enemy in state.enemies if enemy is not state.enemies[enemy_index] and enemy.isAlive],
         food = state.food,
         walls = state.walls,
         score = state.enemies[enemy_index].score
@@ -107,9 +98,8 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
 
 
 def move_enemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
-    moved = _move_snake(state, state.enemies[enemy_index], turn)
-    state.enemies[enemy_index].isAlive = moved
-    if not moved:
-        for position in list(state.enemies[enemy_index].body):
+    state.enemies[enemy_index].isAlive = _move_snake(state, state.enemies[enemy_index], turn)
+    if not state.enemies[enemy_index].isAlive:
+        for position in state.enemies[enemy_index].body:
             state.food.add(position)
-    return moved
+    return state.enemies[enemy_index].isAlive
