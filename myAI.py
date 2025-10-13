@@ -20,22 +20,22 @@ def myAI(state: GameState) -> Turn:
                 if newPosition not in state.walls and newPosition not in minimumDistancesToNearestFood:
                     minimumDistancesToNearestFood[newPosition] = minimumDistanceToNearestFood
                     queue.append(newPosition)
-    queue = deque()
+    queue = []
     for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            insert(queue, (newState, turn, turn, 1, minimumDistancesToNearestFood[newState.snake.head] + 1))
+            insert(queue, (newState, turn, 1, minimumDistancesToNearestFood[newState.snake.head] + 1))
     while queue:
-        state, firstTurn, lastTurn, distance, minimumDistanceToNearestFood = queue.popleft()
+        state, firstTurn, distance, minimumDistanceToNearestFood = queue.popleft()
         newDistance = distance + 1
         for turn in Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
                 if newState.score > state.score:
                     return firstTurn
-                insert(queue, (newState, firstTurn, turn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
+                insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return Turn.STRAIGHT
 
 
@@ -115,9 +115,11 @@ def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
     )
 
 
-def insert(queue: deque[tuple[GameState, Turn, Turn, int, int]], element: tuple[GameState, Turn, Turn, int, int]):
-    for index, otherElement in enumerate(queue):
-        if element[4] >= otherElement[4] and element[3] <= otherElement[3] and otherElement[2] != Turn.STRAIGHT:
-            queue.insert(index, element)
-            return
-    queue.append(element)
+def insert(queue: list[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
+    firstElement = queue[0]
+    if element[4] < firstElement[4] and element[3] > firstElement[3]:
+        queue.insert(0, element)
+    for index, otherElement in reversed(enumerate(queue)):
+        if element[4] >= otherElement[4] and element[3] <= otherElement[3]:
+            queue.insert(index + 1, element)
+            break
