@@ -13,7 +13,7 @@ def myAI(state: GameState) -> Turn:
             if newState.score > state.score:
                 return turn
             states[turn].append((newState, 1, getDistanceToNearestFood(newState) + 1))
-    while any(states):
+    while any(states.values()):
         turnForMinimum = None
         stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood = None, None, None
         for turn in Turn:
