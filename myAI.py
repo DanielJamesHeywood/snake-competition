@@ -12,23 +12,23 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            states[turn].append((newState, 1, getDistanceToNearestFood(newState) + 1))
+            states[turn].append((newState, 1, getDistanceToNearestFood(newState) + 1, turn))
     while any(states.values()):
         turnForMinimum = None
-        stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood = None, None, None
+        stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood, ldForMinimum = None, None, None, None
         for turn in Turn:
-            for state, distance, distanceToNearestFood in states[turn]:
-                if minimumDistanceToNearestFood is None or distanceToNearestFood < minimumDistanceToNearestFood or (distanceToNearestFood == minimumDistanceToNearestFood and distance > distanceForMinimum):
+            for state, distance, distanceToNearestFood, ld in states[turn]:
+                if minimumDistanceToNearestFood is None or distanceToNearestFood < minimumDistanceToNearestFood or (distanceToNearestFood == minimumDistanceToNearestFood and distance > distanceForMinimum) or (distanceToNearestFood == minimumDistanceToNearestFood and distance == distanceForMinimum and ld != Turn.STRAIGHT):
                     turnForMinimum = turn
-                    stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood = state, distance, distanceToNearestFood
-        states[turnForMinimum].remove((stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood))
+                    stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood, ldForMinimum = state, distance, distanceToNearestFood, ld
+        states[turnForMinimum].remove((stateForMinimum, distanceForMinimum, minimumDistanceToNearestFood, ldForMinimum))
         for newTurn in Turn:
             newState = stateForMinimum if newTurn == Turn.RIGHT else copyGameState(stateForMinimum)
             if moveSnake(newState, newTurn):
                 if newState.score > state.score:
                     return turnForMinimum
                 newDistanceForMinimum = distanceForMinimum + 1
-                states[turnForMinimum].append((newState, newDistanceForMinimum, getDistanceToNearestFood(newState) + newDistanceForMinimum))
+                states[turnForMinimum].append((newState, newDistanceForMinimum, getDistanceToNearestFood(newState) + newDistanceForMinimum, newTurn))
     return Turn.STRAIGHT
 
 
