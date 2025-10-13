@@ -7,32 +7,9 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    turns = set()
-    for turn in Turn:
-        newState = copyGameState(state)
-        if moveSnake(newState, turn):
-            minimumDistancesToTail = getMinimumDistancesToNearestTarget(newState, {newState.snake.body[-1]})
-            queue = [newState]
-            while queue and len(queue) < 256:
-                state2 = queue.pop()
-                for turn2 in Turn:
-                    newState2 = state2 if turn2 == Turn.RIGHT else copyGameState(state2)
-                    if moveSnake(newState2, turn2):
-                        if minimumDistancesToTail[newState2] == 0:
-                            turns.add(turn)
-                        inserted = False
-                        for index in reversed(range(len(queue))):
-                            if minimumDistancesToTail[queue[index].snake.head] < minimumDistancesToTail[newState2.snake.head]:
-                                queue.insert(index + 1, newState2)
-                                inserted = True
-                                break
-                        if not inserted:
-                            queue.insert(0, newState2)
-            if queue:
-                turns.add(turn)
     minimumDistancesToNearestFood = getMinimumDistancesToNearestTarget(state, state.food)
     queue = []
-    for turn in turns:
+    for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
@@ -48,7 +25,6 @@ def myAI(state: GameState) -> Turn:
                     return firstTurn
                 insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return queue[-1][1] if queue else Turn.STRAIGHT
-
 
 def getMinimumDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]]) -> dict[tuple[int, int], int]:
     minimumDistancesToNearestTarget = {target: 0 for target in targets}
