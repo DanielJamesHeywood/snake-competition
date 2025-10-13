@@ -27,7 +27,7 @@ def myAI(state: GameState) -> Turn:
     return queue[-1][1] if queue else Turn.STRAIGHT
 
 
-def getMinimumDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]]) -> dictionary[tuple[int, int], int]:
+def getMinimumDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]]) -> dict[tuple[int, int], int]:
     minimumDistancesToNearestTarget = {target: 0 for target in targets}
     queue = deque(targets)
     while queue:
