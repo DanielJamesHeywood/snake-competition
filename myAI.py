@@ -7,18 +7,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    minimumDistancesToNearestFood = {food: 0 for food in state.food}
-    queue = deque([food for food in state.food])
-    while queue:
-        position = queue.popleft()
-        minimumDistanceToNearestFood = minimumDistancesToNearestFood[position] + 1
-        for xOffset, yOffset in DIRECTIONS:
-            newX, newY = position[0] + xOffset, position[1] + yOffset
-            if 0 <= newX < state.width and 0 <= newY < state.height:
-                newPosition = (newX, newY)
-                if newPosition not in state.walls and newPosition not in minimumDistancesToNearestFood:
-                    minimumDistancesToNearestFood[newPosition] = minimumDistanceToNearestFood
-                    queue.append(newPosition)
+    minimumDistancesToNearestFood = getMinimumDistancesToNearestTarget(state, food)
     queue = []
     for turn in Turn:
         newState = copyGameState(state)
@@ -37,6 +26,22 @@ def myAI(state: GameState) -> Turn:
                 insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return queue[-1][1] if queue else Turn.STRAIGHT
 
+
+def getMinimumDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]]) -> dictionary[tuple[int, int], int]:
+    minimumDistancesToNearestTarget = {target: 0 for target in targets}
+    queue = deque(targets)
+    while queue:
+        position = queue.popleft()
+        newMinimumDistanceToNearestTarget = minimumDistancesToNearestTarget[position] + 1
+        for xOffset, yOffset in DIRECTIONS:
+            newX, newY = position[0] + xOffset, position[1] + yOffset
+            if 0 <= newX < state.width and 0 <= newY < state.height:
+                newPosition = (newX, newY)
+                if newPosition not in state.walls and newPosition not in minimumDistancesToNearestTarget:
+                    minimumDistancesToNearestTarget[newPosition] = newMinimumDistanceToNearestTarget
+                    queue.append(newPosition)
+    return minimumDistancesToNearestTarget
+    
 
 def copyGameState(state: GameState) -> GameState:
     return GameState(
