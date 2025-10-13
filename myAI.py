@@ -23,7 +23,7 @@ def get_turns_to_cell_in_cells(state: GameState, cells: set[(int, int)]) -> list
             new_position = (position[0] + dx, position[1] + dy)
             if new_position in cells:
                 return turns + [turn]
-            if new_position in empty | state.food and new_position not in visited:
+            if (new_position in empty or new_position in state.food) and new_position not in visited:
                 visited.add(new_position)
                 queue.append((new_position, new_direction, turns + [turn]))
     return None
