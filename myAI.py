@@ -97,12 +97,9 @@ def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
     snake.move(turn, grow = growing)
     if growing:
         state.food.remove(nextHead)
-        # if len(self.food) < self.num_food:
-        #     self.spawn_food()
         snake.score += 1
         if snake is state.snake:
             state.score += 1
-        # self.spawn_wall()
     return True
 
 def moveEnemy(state: GameState, enemyIndex: int, turn: Turn) -> bool:
