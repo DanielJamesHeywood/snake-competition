@@ -38,7 +38,7 @@ def myAI(state: GameState) -> Turn:
                                 minimumDistancesToTail[newPosition] = minimumDistanceToTail
                                 otherQueue.append(newPosition)
                 otherQueue = [(newState, minimumDistancesToTail[newState.snake.head])]
-                while otherQueue and len(otherQueue) < 256:
+                while otherQueue and len(otherQueue) < 16:
                     otherState, minimumDistanceToTail = otherQueue.pop()
                     for otherTurn in Turn:
                         newOtherState = otherState if otherTurn == Turn.RIGHT else copyGameState(otherState)
@@ -79,7 +79,7 @@ def myAI(state: GameState) -> Turn:
                                     minimumDistancesToTail[newPosition] = minimumDistanceToTail
                                     otherQueue.append(newPosition)
                     otherQueue = [(newState, minimumDistancesToTail[newState.snake.head])]
-                    while otherQueue and len(otherQueue) < 256:
+                    while otherQueue and len(otherQueue) < 16:
                         otherState, minimumDistanceToTail = otherQueue.pop()
                         for otherTurn in Turn:
                             newOtherState = otherState if otherTurn == Turn.RIGHT else copyGameState(otherState)
