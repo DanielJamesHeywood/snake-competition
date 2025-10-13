@@ -44,7 +44,7 @@ def copySnake(snake: Snake) -> Snake:
 
 
 def moveSnake(state: GameState, turn: Turn) -> bool:
-    state.snake.isAlive = moveSnake(state, state.snake, turn)
+    state.snake.isAlive = moveAnySnake(state, state.snake, turn)
     if state.snake.isAlive:
         for index in range(len(state.enemies)):
             if state.enemies[index].isAlive:
@@ -52,7 +52,7 @@ def moveSnake(state: GameState, turn: Turn) -> bool:
     return state.snake.isAlive
 
 
-def moveSnake(state: GameState, snake: Snake, turn: Turn) -> bool:
+def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
     nextHead = snake.get_next_head(turn)
     if nextHead in state.walls:
         return False
@@ -78,7 +78,7 @@ def moveSnake(state: GameState, snake: Snake, turn: Turn) -> bool:
     return True
 
 def moveEnemy(state: GameState, enemy_index: int, turn: Turn) -> bool:
-    state.enemies[enemy_index].isAlive = moveSnake(state, state.enemies[enemy_index], turn)
+    state.enemies[enemy_index].isAlive = moveAnySnake(state, state.enemies[enemy_index], turn)
     if not state.enemies[enemy_index].isAlive:
         for position in state.enemies[enemy_index].body:
             state.food.add(position)
