@@ -107,11 +107,13 @@ def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
     return True
 
 def moveEnemy(state: GameState, enemyIndex: int, turn: Turn) -> bool:
-    state.enemies[enemyIndex].isAlive = moveAnySnake(state, state.enemies[enemyIndex], turn)
-    if not state.enemies[enemyIndex].isAlive:
-        for position in state.enemies[enemyIndex].body:
+    enemy = state.enemies[enemyIndex]
+    moved = moveAnySnake(state, enemy, turn)
+    enemy.isAlive = moved
+    if not moved:
+        for position in enemy.body:
             state.food.add(position)
-    return state.enemies[enemyIndex].isAlive
+    return moved
 
 
 def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
