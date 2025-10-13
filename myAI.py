@@ -119,3 +119,4 @@ def insert(queue: deque[tuple[GameState, Turn, Turn, int, int]], element: tuple[
         if element[4] >= otherElement[4] and element[3] <= otherElement[3]:
             queue.insert(index, element)
             return
+    queue.append(element)
