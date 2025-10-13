@@ -1,8 +1,5 @@
-import random
 from collections import deque
-from snake.logic import GameState, Turn, Snake, Direction
-
-from snake.logic import DIRECTIONS
+from snake.logic import GameState, Turn, Snake
 from examples.smartAI import smartAI as enemyAI
 
 
