@@ -24,39 +24,7 @@ def myAI(state: GameState) -> Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
-                tail = newState.snake.body[-1]
-                minimumDistancesToTail = {tail: 0}
-                otherQueue = deque([tail])
-                while otherQueue:
-                    position = otherQueue.popleft()
-                    minimumDistanceToTail = minimumDistancesToTail[position] + 1
-                    for xOffset, yOffset in DIRECTIONS:
-                        newX, newY = position[0] + xOffset, position[1] + yOffset
-                        if 0 <= newX < state.width and 0 <= newY < state.height:
-                            newPosition = (newX, newY)
-                            if newPosition not in newState.walls and newPosition not in minimumDistancesToTail:
-                                minimumDistancesToTail[newPosition] = minimumDistanceToTail
-                                otherQueue.append(newPosition)
-                otherQueue = [(newState, minimumDistancesToTail[newState.snake.head])]
-                while otherQueue and len(otherQueue) < 16:
-                    otherState, minimumDistanceToTail = otherQueue.pop()
-                    for otherTurn in Turn:
-                        newOtherState = otherState if otherTurn == Turn.RIGHT else copyGameState(otherState)
-                        if moveSnake(newOtherState, otherTurn):
-                            minimumDistanceToTail = minimumDistancesToTail[newOtherState.snake.head]
-                            if minimumDistanceToTail == 0:
-                                return turn
-                            inserted = False
-                            for index in reversed(range(len(otherQueue))):
-                                otherElement = otherQueue[index]
-                                if minimumDistanceToTail <= otherElement[1]:
-                                    otherQueue.insert(index + 1, (newOtherState, minimumDistanceToTail))
-                                    inserted = True
-                                    break
-                            if not inserted:
-                                otherQueue.insert(0, (newOtherState, minimumDistanceToTail))
-                if otherQueue:
-                    return turn
+                return turn
             insert(queue, (newState, turn, 1, minimumDistancesToNearestFood[newState.snake.head] + 1))
     while queue and len(queue) < 256:
         state, firstTurn, distance, minimumDistanceToNearestFood = queue.pop()
@@ -65,39 +33,7 @@ def myAI(state: GameState) -> Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
                 if newState.score > state.score:
-                    tail = newState.snake.body[-1]
-                    minimumDistancesToTail = {tail: 0}
-                    otherQueue = deque([tail])
-                    while otherQueue:
-                        position = otherQueue.popleft()
-                        minimumDistanceToTail = minimumDistancesToTail[position] + 1
-                        for xOffset, yOffset in DIRECTIONS:
-                            newX, newY = position[0] + xOffset, position[1] + yOffset
-                            if 0 <= newX < state.width and 0 <= newY < state.height:
-                                newPosition = (newX, newY)
-                                if newPosition not in newState.walls and newPosition not in minimumDistancesToTail:
-                                    minimumDistancesToTail[newPosition] = minimumDistanceToTail
-                                    otherQueue.append(newPosition)
-                    otherQueue = [(newState, minimumDistancesToTail[newState.snake.head])]
-                    while otherQueue and len(otherQueue) < 16:
-                        otherState, minimumDistanceToTail = otherQueue.pop()
-                        for otherTurn in Turn:
-                            newOtherState = otherState if otherTurn == Turn.RIGHT else copyGameState(otherState)
-                            if moveSnake(newOtherState, otherTurn):
-                                minimumDistanceToTail = minimumDistancesToTail[newOtherState.snake.head]
-                                if minimumDistanceToTail == 0:
-                                    return firstTurn
-                                inserted = False
-                                for index in reversed(range(len(otherQueue))):
-                                    otherElement = otherQueue[index]
-                                    if minimumDistanceToTail <= otherElement[1]:
-                                        otherQueue.insert(index + 1, (newOtherState, minimumDistanceToTail))
-                                        inserted = True
-                                        break
-                                if not inserted:
-                                    otherQueue.insert(0, (newOtherState, minimumDistanceToTail))
-                    if otherQueue:
-                        return firstTurn
+                    return firstTurn
                 insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return queue[-1][1] if queue else Turn.STRAIGHT
 
