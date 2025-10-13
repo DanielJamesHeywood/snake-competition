@@ -60,7 +60,7 @@ def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
         return False
     if not (0 <= nextHead[0] < state.width and 0 <= nextHead[1] < state.height):
         return False
-    if nextHead in snake.body and not nextHead == -1:
+    if nextHead in snake.body and not nextHead == snake.body[-1]:
         return False
     if snake is not state.snake and nextHead in state.snake.body:
         return False
