@@ -27,7 +27,9 @@ def copyGameState(state: GameState) -> GameState:
         width = state.width,
         height = state.height,
         snake = copySnake(state.snake),
-        enemies = [copySnake(enemy) for enemy in state.enemies],
+        enemies = [
+            copySnake(enemy) for enemy in state.enemies
+        ],
         food = state.food.copy(),
         walls = state.walls.copy(),
         score = state.score
@@ -90,7 +92,9 @@ def getEnemyGameState(state: GameState, enemy_index: int) -> GameState:
         width = state.width,
         height = state.height,
         snake = state.enemies[enemy_index],
-        enemies = [state.snake] + [enemy for enemy in state.enemies if enemy is not state.enemies[enemy_index] and enemy.isAlive],
+        enemies = [state.snake] + [
+            enemy for enemy in state.enemies if enemy is not state.enemies[enemy_index] and enemy.isAlive
+        ],
         food = state.food,
         walls = state.walls,
         score = state.enemies[enemy_index].score
