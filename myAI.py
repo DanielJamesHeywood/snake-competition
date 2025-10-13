@@ -7,7 +7,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    minimumDistancesToNearestFood = getMinimumDistancesToNearestTarget(state, food)
+    minimumDistancesToNearestFood = getMinimumDistancesToNearestTarget(state, state.food)
     queue = []
     for turn in Turn:
         newState = copyGameState(state)
