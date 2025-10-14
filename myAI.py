@@ -43,6 +43,15 @@ def getMinimumDistancesToNearestFood(state: GameState) -> dict[tuple[int, int], 
     return minimumDistancesToNearestFood
 
 
+def insert(queue: list[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
+    for index in reversed(range(len(queue))):
+        otherElement = queue[index]
+        if element[3] < otherElement[3] or (element[3] == otherElement[3] and element[2] >= otherElement[2]):
+            queue.insert(index + 1, element)
+            return
+    queue.insert(0, element)
+
+
 def copyGameState(state: GameState) -> GameState:
     return GameState(
         width = state.width,
@@ -115,12 +124,3 @@ def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
         walls = state.walls,
         score = enemy.score
     )
-
-
-def insert(queue: list[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
-    for index in reversed(range(len(queue))):
-        otherElement = queue[index]
-        if element[3] < otherElement[3] or (element[3] == otherElement[3] and element[2] >= otherElement[2]):
-            queue.insert(index + 1, element)
-            return
-    queue.insert(0, element)
