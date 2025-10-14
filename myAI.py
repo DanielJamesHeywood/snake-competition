@@ -8,16 +8,16 @@ from examples.smartAI import smartAI as enemyAI
 
 def myAI(state: GameState) -> Turn:
     minimumDistancesToNearestFood = getMinimumDistancesToNearestFood(state)
-    queue = deque()
+    queue = []
     for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
             newMinimumDistancesToNearestFood = minimumDistancesToNearestFood if newState.food == state.food else getMinimumDistancesToNearestFood(newState)
-            queue.append((newState, newMinimumDistancesToNearestFood, turn, 1, newMinimumDistancesToNearestFood[newState.snake.head] + 1))
+            insert(queue, (newState, newMinimumDistancesToNearestFood, turn, 1, newMinimumDistancesToNearestFood[newState.snake.head] + 1))
     while queue and len(queue) < 256:
-        state, minimumDistancesToNearestFood, firstTurn, distance, minimumDistanceToNearestFood = queue.popleft()
+        state, minimumDistancesToNearestFood, firstTurn, distance, minimumDistanceToNearestFood = queue.pop()
         newDistance = distance + 1
         for turn in Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
@@ -25,7 +25,7 @@ def myAI(state: GameState) -> Turn:
                 if newState.score > state.score:
                     return firstTurn
                 newMinimumDistancesToNearestFood = minimumDistancesToNearestFood if newState.food == state.food else getMinimumDistancesToNearestFood(newState)
-                queue.append((newState, newMinimumDistancesToNearestFood, turn, 1, newMinimumDistancesToNearestFood[newState.snake.head] + 1))
+                insert(queue, (newState, newMinimumDistancesToNearestFood, firstTurn, newDistance, newMinimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return queue[-1][2] if queue else Turn.STRAIGHT
 
 
