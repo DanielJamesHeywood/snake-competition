@@ -30,7 +30,9 @@ def myAI(state: GameState) -> Turn:
 
 
 def getMinimumDistancesToNearestFood(state: GameState) -> dict[tuple[int, int], int]:
-    minimumDistancesToNearestFood = {food: 0 for food in state.food}
+    minimumDistancesToNearestFood = {
+        food: 0 for food in state.food
+    }
     queue = deque(state.food)
     while queue:
         position = queue.popleft()
@@ -59,7 +61,9 @@ def copyGameState(state: GameState) -> GameState:
         width = state.width,
         height = state.height,
         snake = copySnake(state.snake),
-        enemies = [copySnake(enemy) for enemy in state.enemies],
+        enemies = [
+            copySnake(enemy) for enemy in state.enemies
+        ],
         food = state.food.copy(),
         walls = state.walls.copy(),
         score = state.score
@@ -121,7 +125,9 @@ def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
         width = state.width,
         height = state.height,
         snake = enemy,
-        enemies = [state.snake] + [otherEnemy for otherEnemy in state.enemies if otherEnemy is not enemy and otherEnemy.isAlive],
+        enemies = [state.snake] + [
+            otherEnemy for otherEnemy in state.enemies if otherEnemy is not enemy and otherEnemy.isAlive
+        ],
         food = state.food,
         walls = state.walls,
         score = enemy.score
