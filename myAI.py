@@ -14,16 +14,18 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            insert(queue, (newState, turn, 1, minimumDistancesToNearestFood[newState.snake.head] + 1))
+            newMinimumDistancesToNearestFood = minimumDistancesToNearestFood if newState.food == state.food else getMinimumDistancesToNearestFood(newState)
+            insert(queue, (newState, newMinimumDistancesToNearestFood, turn, 1, newMinimumDistancesToNearestFood[newState.snake.head] + 1))
     while queue and len(queue) < 256:
-        state, firstTurn, distance, minimumDistanceToNearestFood = queue.pop()
+        state, minimumDistancesToNearestFood, firstTurn, distance, minimumDistanceToNearestFood = queue.pop()
         newDistance = distance + 1
         for turn in Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
                 if newState.score > state.score:
                     return firstTurn
-                insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
+                newMinimumDistancesToNearestFood = minimumDistancesToNearestFood if newState.food == state.food else getMinimumDistancesToNearestFood(newState)
+                insert(queue, (newState, newMinimumDistancesToNearestFood, firstTurn, newDistance, newMinimumDistancesToNearestFood[newState.snake.head] + newDistance))
     return queue[-1][1] if queue else Turn.STRAIGHT
 
 
@@ -46,7 +48,7 @@ def getMinimumDistancesToNearestFood(state: GameState) -> dict[tuple[int, int], 
 def insert(queue: list[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
     for index in reversed(range(len(queue))):
         otherElement = queue[index]
-        if element[3] < otherElement[3] or (element[3] == otherElement[3] and element[2] >= otherElement[2]):
+        if element[4] < otherElement[4] or (element[4] == otherElement[4] and element[3] >= otherElement[3]):
             queue.insert(index + 1, element)
             return
     queue.insert(0, element)
