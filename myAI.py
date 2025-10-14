@@ -26,7 +26,7 @@ def myAI(state: GameState) -> Turn:
                     return firstTurn
                 newMinimumDistancesToNearestFood = minimumDistancesToNearestFood if newState.food == state.food else getMinimumDistancesToNearestFood(newState)
                 insert(queue, (newState, newMinimumDistancesToNearestFood, firstTurn, newDistance, newMinimumDistancesToNearestFood[newState.snake.head] + newDistance))
-    return queue[-1][1] if queue else Turn.STRAIGHT
+    return queue[-1][2] if queue else Turn.STRAIGHT
 
 
 def getMinimumDistancesToNearestFood(state: GameState) -> dict[tuple[int, int], int]:
