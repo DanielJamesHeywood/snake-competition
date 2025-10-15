@@ -31,7 +31,8 @@ def myAI(state: GameState) -> Turn:
     while queue and len(states) < 256:
         stateForMinimum, firstTurnForMinimum, distanceForMinimum = None, None, None
         minimumDistanceToNearestFood = None
-        for state, firstTurn, distance in queue:
+        for stateIndex, firstTurn, distance in queue:
+            state = states[stateIndex]
             distanceToNearestFood = distancesToNearestFood[state.snake.head]
             if distanceToNearestFood == 0:
                 return firstTurn
