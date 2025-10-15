@@ -41,7 +41,7 @@ def myAI(state: GameState) -> Turn:
 
 
 def insert(queue: deque[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
-    for index, otherElement in enumerate(priorityQueue):
+    for index, otherElement in enumerate(queue):
         if element[3] < otherElement[3] or (element[3] == otherElement[3] and element[2] >= otherElement[2]):
             queue.insert(index, element)
             return
