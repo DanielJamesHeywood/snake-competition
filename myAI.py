@@ -7,29 +7,6 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    turns = set()
-    for turn in Turn:
-        newState = copyGameState(state)
-        if moveSnake(newState, turn):
-            empty_cells = get_empty_cells(newState)
-            head = get_head(newState.snake)
-            tail = get_tail(newState.snake)
-            _1 = {head}
-            _2 = deque([head])
-            _3 = False
-            while _2 and not _3:
-                pos = _2.popleft()
-                for dx, dy in DIRECTIONS:
-                    next_pos = (pos[0] + dx, pos[1] + dy)
-                    if (next_pos in empty_cells | newState.food) and next_pos not in _1:
-                        _1.add(next_pos)
-                        _2.append(next_pos)
-                    if next_pos == tail:
-                        _3 = True
-            if _3:
-                turns.add(turn)
-    if not turns:
-        turns = set(Turn)
     distancesToNearestFood = {
         food: 0 for food in state.food
     }
@@ -45,7 +22,7 @@ def myAI(state: GameState) -> Turn:
                     distancesToNearestFood[newPosition] = newDistanceToNearestFood
                     queue.append(newPosition)
     queue = []
-    for turn in turns:
+    for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
