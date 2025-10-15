@@ -21,7 +21,7 @@ def myAI(state: GameState) -> Turn:
                 if newPosition not in state.walls and newPosition not in distancesToNearestFood:
                     distancesToNearestFood[newPosition] = newDistanceToNearestFood
                     queue.append(newPosition)
-    queue = []
+    queue = deque()
     for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
@@ -40,7 +40,7 @@ def myAI(state: GameState) -> Turn:
     return queue[-1][1] if queue else Turn.STRAIGHT
 
 
-def insert(queue: list[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
+def insert(queue: deque[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
     for index in reversed(range(len(queue))):
         otherElement = queue[index]
         if element[3] < otherElement[3] or (element[3] == otherElement[3] and element[2] >= otherElement[2]):
