@@ -29,7 +29,7 @@ def myAI(state: GameState) -> Turn:
                 return turn
             insert(priorityQueue, (newState, turn, 1, distancesToNearestFood[newState.snake.head] + 1))
     while priorityQueue and len(priorityQueue) < 256:
-        state, firstTurn, distance, distanceToNearestFood = priorityQueue.popleft()
+        state, firstTurn, distance, distanceToNearestFood = priorityQueue.pop()
         newDistance = distance + 1
         for turn in Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
@@ -41,7 +41,7 @@ def myAI(state: GameState) -> Turn:
 
 
 def insert(queue: deque[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
-    for index in range(len(queue)):
+    for index in reversed(range(len(queue))):
         otherElement = queue[index]
         if element[3] < otherElement[3] or (element[3] == otherElement[3] and element[2] >= otherElement[2]):
             queue.insert(index + 1, element)
