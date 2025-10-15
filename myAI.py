@@ -36,7 +36,7 @@ def myAI(state: GameState) -> Turn:
             if distanceToNearestFood == 0:
                 return firstTurn
             distanceToNearestFood += distance + 1
-            if not stateForMinimum or distanceToNearestFood < minimumDistanceToNearestFood || (distanceToNearestFood == minimumDistanceToNearestFood && distance > distanceForMinimum):
+            if not stateForMinimum or distanceToNearestFood < minimumDistanceToNearestFood or (distanceToNearestFood == minimumDistanceToNearestFood and distance > distanceForMinimum):
                 stateForMinimum, firstTurnForMinimum, distanceForMinimum = state, firstTurn, distance
                 minimumDistanceToNearestFood = distanceToNearestFood
         newDistance = distanceForMinimum + 1
