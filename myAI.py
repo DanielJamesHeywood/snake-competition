@@ -7,6 +7,27 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
+    turns = set()
+    for turn in Turn:
+        newState = copyGameState(state)
+        if moveSnake(newState, turn):
+            empty_cells = get_empty_cells(newState)
+            head = get_head(newState.snake)
+            tail = get_tail(newState.snake)
+            _1 = {head}
+            _2 = deque([head])
+            _3 = False
+            while _2 and not _3:
+                pos = _2.popleft()
+                for dx, dy in DIRECTIONS:
+                    next_pos = (pos[0] + dx, pos[1] + dy)
+                    if (next_pos in empty_cells | newState.food) and next_pos not in _1:
+                        _1.add(next_pos)
+                        _2.append(next_pos)
+                    if next_pos == tail:
+                        _3 = True
+            if _3:
+                turns.add(turn)
     distancesToNearestFood = {
         food: 0 for food in state.food
     }
@@ -22,7 +43,7 @@ def myAI(state: GameState) -> Turn:
                     distancesToNearestFood[newPosition] = newDistanceToNearestFood
                     queue.append(newPosition)
     queue = []
-    for turn in Turn:
+    for turn in turns:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
@@ -125,3 +146,20 @@ def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
         walls = state.walls,
         score = enemy.score
     )
+
+
+def get_head(snake: Snake) -> (int, int):
+    return snake.body[0]
+
+
+def get_tail(snake: Snake) -> (int, int):
+    return snake.body[-1]
+
+
+def get_empty_cells(state: GameState) -> set[(int, int)]:
+    all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
+    occupied = state.walls | state.food | state.snake.body_set
+    for s in state.enemies:
+        if s.isAlive:
+            occupied |= s.body_set
+    return all_cells - occupied
