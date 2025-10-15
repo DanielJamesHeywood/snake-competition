@@ -21,32 +21,31 @@ def myAI(state: GameState) -> Turn:
                 if newPosition not in state.walls and newPosition not in distancesToNearestFood:
                     distancesToNearestFood[newPosition] = newDistanceToNearestFood
                     queue.append(newPosition)
-    queue = []
+    states = []
+    queue = set()
     for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
-            if newState.score > state.score:
-                return turn
-            insert(queue, (newState, turn, 1, distancesToNearestFood[newState.snake.head] + 1))
-    while queue and len(queue) < 256:
-        state, firstTurn, distance, distanceToNearestFood = queue.pop()
-        newDistance = distance + 1
+            states.append(newState)
+            queue.add((len(states) - 1, turn, 1))
+    while queue and len(states) < 256:
+        stateForMinimum, firstTurnForMinimum, distanceForMinimum = None, None, None
+        minimumDistanceToNearestFood = None
+        for state, firstTurn, distance in queue:
+            distanceToNearestFood = distancesToNearestFood[state.snake.head]
+            if distanceToNearestFood == 0:
+                return firstTurn
+            distanceToNearestFood += distance + 1
+            if distanceToNearestFood < minimumDistanceToNearestFood || (distanceToNearestFood == minimumDistanceToNearestFood && distanceToNearestFood > distanceForMinimum):
+                stateForMinimum, firstTurnForMinimum, distanceForMinimum = state, firstTurn, distance
+                minimumDistanceToNearestFood = distanceToNearestFood
+        newDistance = distanceForMinimum + 1
         for turn in Turn:
-            newState = state if turn == Turn.RIGHT else copyGameState(state)
+            newState = stateForMinimum if turn == Turn.RIGHT else copyGameState(stateForMinimum)
             if moveSnake(newState, turn):
-                if newState.score > state.score:
-                    return firstTurn
-                insert(queue, (newState, firstTurn, newDistance, distancesToNearestFood[newState.snake.head] + newDistance))
-    return queue[-1][1] if queue else Turn.STRAIGHT
-
-
-def insert(queue: list[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
-    for index in reversed(range(len(queue))):
-        otherElement = queue[index]
-        if element[3] < otherElement[3] or (element[3] == otherElement[3] and element[2] >= otherElement[2]):
-            queue.insert(index + 1, element)
-            return
-    queue.insert(0, element)
+                states.append(newState)
+                queue.add((len(states) - 1, firstTurnForMinimum, newDistance))
+    return Turn.STRAIGHT
 
 
 def copyGameState(state: GameState) -> GameState:
