@@ -7,19 +7,19 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    minimumDistancesToNearestFood = {
+    distancesToNearestFood = {
         food: 0 for food in state.food
     }
     queue = deque(state.food)
     while queue:
         position = queue.popleft()
-        newMinimumDistanceToNearestFood = minimumDistancesToNearestFood[position] + 1
+        newDistanceToNearestFood = distancesToNearestFood[position] + 1
         for xOffset, yOffset in DIRECTIONS:
             newX, newY = position[0] + xOffset, position[1] + yOffset
             if 0 <= newX < state.width and 0 <= newY < state.height:
                 newPosition = (newX, newY)
-                if newPosition not in state.walls and newPosition not in minimumDistancesToNearestFood:
-                    minimumDistancesToNearestFood[newPosition] = newMinimumDistanceToNearestFood
+                if newPosition not in state.walls and newPosition not in distancesToNearestFood:
+                    distancesToNearestFood[newPosition] = newDistanceToNearestFood
                     queue.append(newPosition)
     queue = []
     for turn in Turn:
@@ -27,16 +27,16 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            insert(queue, (newState, turn, 1, minimumDistancesToNearestFood[newState.snake.head] + 1))
+            insert(queue, (newState, turn, 1, distancesToNearestFood[newState.snake.head] + 1))
     while queue and len(queue) < 256:
-        state, firstTurn, distance, minimumDistanceToNearestFood = queue.pop()
+        state, firstTurn, distance, distanceToNearestFood = queue.pop()
         newDistance = distance + 1
         for turn in Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
                 if newState.score > state.score:
                     return firstTurn
-                insert(queue, (newState, firstTurn, newDistance, minimumDistancesToNearestFood[newState.snake.head] + newDistance))
+                insert(queue, (newState, firstTurn, newDistance, distancesToNearestFood[newState.snake.head] + newDistance))
     return queue[-1][1] if queue else Turn.STRAIGHT
 
 
