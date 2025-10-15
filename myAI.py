@@ -28,6 +28,8 @@ def myAI(state: GameState) -> Turn:
                         _3 = True
             if _3:
                 turns.add(turn)
+    if not turns:
+        turns = set(Turn)
     distancesToNearestFood = {
         food: 0 for food in state.food
     }
