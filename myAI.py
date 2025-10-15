@@ -125,20 +125,3 @@ def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
         walls = state.walls,
         score = enemy.score
     )
-
-
-def get_head(snake: Snake) -> (int, int):
-    return snake.body[0]
-
-
-def get_tail(snake: Snake) -> (int, int):
-    return snake.body[-1]
-
-
-def get_empty_cells(state: GameState) -> set[(int, int)]:
-    all_cells = {(x, y) for x in range(state.width) for y in range(state.height)}
-    occupied = state.walls | state.food | state.snake.body_set
-    for s in state.enemies:
-        if s.isAlive:
-            occupied |= s.body_set
-    return all_cells - occupied
