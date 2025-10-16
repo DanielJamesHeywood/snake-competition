@@ -67,14 +67,14 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
         rhState, rhTurn, rhDistance, rhDistanceToNearestFood = rhs
         rhTotalDistanceToNearestFood = rhDistance + rhDistanceToNearestFood
         if lhTotalDistanceToNearestFood != rhTotalDistanceToNearestFood:
-            return -1 if lhTotalDistanceToNearestFood < rhTotalDistanceToNearestFood else 1
-        return -1 if lhDistance > rhDistance else 0 if lhDistance == rhDistance else 1
+            return -1 if lhTotalDistanceToNearestFood > rhTotalDistanceToNearestFood else 1
+        return -1 if lhDistance < rhDistance else 0 if lhDistance == rhDistance else 1
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
 
 def insertIntoPriorityQueue(priorityQueue, newElement, compare):
     for index, element in enumerate(priorityQueue):
-        if compare(newElement, element) <= 0:
+        if compare(newElement, element) >= 0:
             priorityQueue.insert(index, newElement)
             return
     priorityQueue.append(newElement)
