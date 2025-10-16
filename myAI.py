@@ -14,11 +14,11 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
             insertIntoPriorityQueueForFoodFinding(
                 priorityQueue,
-                (newState, turn, 1, distancesToNearestFood[newState.snake.head] + 1)
+                (newState, turn, 1, distancesToNearestFood[newState.snake.head])
             )
     while priorityQueue and len(priorityQueue) < 256:
         state, turn, distance, distanceToNearestFood = priorityQueue.popleft()
-        if distance == distanceToNearestFood:
+        if distanceToNearestFood == 0:
             return turn
         newDistance = distance + 1
         for newTurn in Turn:
@@ -26,7 +26,7 @@ def myAI(state: GameState) -> Turn:
             if moveSnake(newState, newTurn):
                 insertIntoPriorityQueueForFoodFinding(
                     priorityQueue,
-                    (newState, turn, newDistance, distancesToNearestFood[newState.snake.head] + newDistance)
+                    (newState, turn, newDistance, distancesToNearestFood[newState.snake.head])
                 )
     return priorityQueue[-1][1] if priorityQueue else Turn.STRAIGHT
 
@@ -58,10 +58,11 @@ def getDistancesToNearestTarget(state, targets):
 
 def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
     def compare(lhs, rhs):
-        lhDistanceToNearestFood, rhDistanceToNearestFood = lhs[3], rhs[3]
-        if lhDistanceToNearestFood != rhDistanceToNearestFood:
-            return -1 if lhDistanceToNearestFood < rhDistanceToNearestFood else 1
         lhDistance, rhDistance = lhs[2], rhs[2]
+        lhDistanceToNearestFood, rhDistanceToNearestFood = lhs[3], rhs[3]
+        lhTotalDistanceToNearestFood, rhTotalDistanceToNearestFood = lhDistance + lhDistanceToNearestFood, rhDistance + rhDistanceToNearestFood
+        if lhTotalDistanceToNearestFood != rhTotalDistanceToNearestFood:
+            return -1 if lhTotalDistanceToNearestFood < rhTotalDistanceToNearestFood else 1
         return -1 if lhDistance > rhDistance else 0 if lhDistance == rhDistance else 1
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
