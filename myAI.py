@@ -12,12 +12,12 @@ def myAI(state: GameState) -> Turn:
     for turn in Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
-            distanceToNearestFood = distancesToNearestFood[newState.snake.head]
-            if distanceToNearestFood == 0:
+            newDistanceToNearestFood = distancesToNearestFood[newState.snake.head]
+            if newDistanceToNearestFood == 0:
                 return turn
             insertIntoPriorityQueueForFoodFinding(
                 priorityQueue,
-                (newState, turn, 1, distanceToNearestFood)
+                (newState, turn, 1, newDistanceToNearestFood)
             )
     while priorityQueue and len(priorityQueue) < 256:
         state, turn, distance, distanceToNearestFood = priorityQueue.popleft()
