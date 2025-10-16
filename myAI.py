@@ -100,6 +100,15 @@ def moveSnake(state: GameState, turn: Turn) -> bool:
     return state.snake.isAlive
 
 
+def moveEnemy(state: GameState, enemyIndex: int, turn: Turn) -> bool:
+    enemy = state.enemies[enemyIndex]
+    enemy.isAlive = moveAnySnake(state, enemy, turn)
+    if not enemy.isAlive:
+        for position in enemy.body:
+            state.food.add(position)
+    return enemy.isAlive
+
+
 def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
     nextHead = snake.get_next_head(turn)
     if nextHead in state.walls:
@@ -121,14 +130,6 @@ def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
         if snake is state.snake:
             state.score += 1
     return True
-
-def moveEnemy(state: GameState, enemyIndex: int, turn: Turn) -> bool:
-    enemy = state.enemies[enemyIndex]
-    enemy.isAlive = moveAnySnake(state, enemy, turn)
-    if not enemy.isAlive:
-        for position in enemy.body:
-            state.food.add(position)
-    return enemy.isAlive
 
 
 def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
