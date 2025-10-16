@@ -58,7 +58,7 @@ def insertIntoPriorityQueue(priorityQueue: deque[tuple[GameState, Turn, int, int
     insertIntoPriorityQueu(priorityQueue, newElement, compare)
 
 
-def insertIntoPriorityQueu[E](priorityQueue: deque[E], newElement: E, compare: Callable[[E, E], int]):
+def insertIntoPriorityQueu[E](priorityQueue: deque[E], newElement: E, compare: callable[[E, E], int]):
     for index, element in enumerate(priorityQueue):
         if compare(newElement, element) <= 0:
             priorityQueue.insert(index, newElement)
