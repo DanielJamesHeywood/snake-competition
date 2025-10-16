@@ -48,7 +48,7 @@ def myAI(state: GameState) -> Turn:
 
 
 def insert(priorityQueue: deque[tuple[GameState, Turn, int, int]], newElement: tuple[GameState, Turn, int, int]):
-    def compare(lhs, rhs) -> int:
+    def compare(lhs: tuple[GameState, Turn, int, int], rhs: tuple[GameState, Turn, int, int]) -> int:
         lhState, lhTurn, lhDistance, lhDistanceToNearestFood = lhs
         rhState, rhTurn, rhDistance, rhDistanceToNearestFood = rhs
         if lhDistanceToNearestFood != rhDistanceToNearestFood:
