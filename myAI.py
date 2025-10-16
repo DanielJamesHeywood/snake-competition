@@ -28,7 +28,7 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            insert(
+            insertIntoPriorityQueueForFoodFinding(
                 priorityQueue,
                 (newState, turn, 1, distancesToNearestFood[newState.snake.head] + 1)
             )
@@ -40,14 +40,17 @@ def myAI(state: GameState) -> Turn:
             if moveSnake(newState, newTurn):
                 if newState.score > state.score:
                     return turn
-                insert(
+                insertIntoPriorityQueueForFoodFinding(
                     priorityQueue,
                     (newState, turn, newDistance, distancesToNearestFood[newState.snake.head] + newDistance)
                 )
     return priorityQueue[-1][1] if priorityQueue else Turn.STRAIGHT
 
 
-def insert(priorityQueue: deque[tuple[GameState, Turn, int, int]], newElement: tuple[GameState, Turn, int, int]):
+def insertIntoPriorityQueueForFoodFinding(
+    priorityQueue: deque[tuple[GameState, Turn, int, int]],
+    newElement: tuple[GameState, Turn, int, int]
+):
     def compare(lhs: tuple[GameState, Turn, int, int], rhs: tuple[GameState, Turn, int, int]) -> int:
         lhDistanceToNearestFood, rhDistanceToNearestFood = lhs[3], rhs[3]
         if lhDistanceToNearestFood != rhDistanceToNearestFood:
