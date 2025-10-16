@@ -62,9 +62,10 @@ def getDistancesToNearestTarget(state, targets):
 
 def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
     def compare(lhs, rhs):
-        lhDistance, rhDistance = lhs[2], rhs[2]
-        lhDistanceToNearestFood, rhDistanceToNearestFood = lhs[3], rhs[3]
-        lhTotalDistanceToNearestFood, rhTotalDistanceToNearestFood = lhDistance + lhDistanceToNearestFood, rhDistance + rhDistanceToNearestFood
+        lhState, lhTurn, lhDistance, lhDistanceToNearestFood = lhs
+        lhTotalDistanceToNearestFood = lhDistance + lhDistanceToNearestFood
+        rhState, rhTurn, rhDistance, rhDistanceToNearestFood = rhs
+        rhTotalDistanceToNearestFood = rhDistance + rhDistanceToNearestFood
         if lhTotalDistanceToNearestFood != rhTotalDistanceToNearestFood:
             return -1 if lhTotalDistanceToNearestFood < rhTotalDistanceToNearestFood else 1
         return -1 if lhDistance > rhDistance else 0 if lhDistance == rhDistance else 1
