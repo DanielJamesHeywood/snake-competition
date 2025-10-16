@@ -8,20 +8,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    distancesToNearestFood = {
-        food: 0 for food in state.food
-    }
-    queue = deque(state.food)
-    while queue:
-        position = queue.popleft()
-        newDistanceToNearestFood = distancesToNearestFood[position] + 1
-        for xOffset, yOffset in DIRECTIONS:
-            newX, newY = position[0] + xOffset, position[1] + yOffset
-            if 0 <= newX < state.width and 0 <= newY < state.height:
-                newPosition = (newX, newY)
-                if newPosition not in state.walls and newPosition not in distancesToNearestFood:
-                    distancesToNearestFood[newPosition] = newDistanceToNearestFood
-                    queue.append(newPosition)
+    distancesToNearestFood = getDistancesToNearestTarget(state, state.food)
     priorityQueue = deque()
     for turn in Turn:
         newState = copyGameState(state)
@@ -45,6 +32,23 @@ def myAI(state: GameState) -> Turn:
                     (newState, turn, newDistance, distancesToNearestFood[newState.snake.head] + newDistance)
                 )
     return priorityQueue[-1][1] if priorityQueue else Turn.STRAIGHT
+
+
+def getDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]]) -> dict[tuple[int, int], int]:
+    distancesToNearestTarget = {
+        target: 0 for target in targets
+    }
+    queue = deque(targets)
+    while queue:
+        position = queue.popleft()
+        newDistanceToNearestTarget = distancesToNearestTarget[position] + 1
+        for xOffset, yOffset in DIRECTIONS:
+            newX, newY = position[0] + xOffset, position[1] + yOffset
+            if 0 <= newX < state.width and 0 <= newY < state.height:
+                newPosition = (newX, newY)
+                if newPosition not in state.walls and newPosition not in distancesToNearestTarget:
+                    distancesToNearestTarget[newPosition] = newDistanceToNearestTarget
+                    queue.append(newPosition)
 
 
 def insertIntoPriorityQueueForFoodFinding(
