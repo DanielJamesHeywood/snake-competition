@@ -27,7 +27,7 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            insertInto(priorityQueue, (newState, turn, 1, distancesToNearestFood[newState.snake.head] + 1))
+            insertInto((newState, turn, 1, distancesToNearestFood[newState.snake.head] + 1), priorityQueue)
     while priorityQueue and len(priorityQueue) < 256:
         state, firstTurn, distance, distanceToNearestFood = priorityQueue.popleft()
         newDistance = distance + 1
@@ -36,11 +36,11 @@ def myAI(state: GameState) -> Turn:
             if moveSnake(newState, turn):
                 if newState.score > state.score:
                     return firstTurn
-                insertInto(priorityQueue, (newState, firstTurn, newDistance, distancesToNearestFood[newState.snake.head] + newDistance))
+                insertInto((newState, firstTurn, newDistance, distancesToNearestFood[newState.snake.head] + newDistance), priorityQueue)
     return priorityQueue[-1][1] if priorityQueue else Turn.STRAIGHT
 
 
-def insertInto(priorityQueue: deque[tuple[GameState, Turn, int, int]], element: tuple[GameState, Turn, int, int]):
+def insertInto(element: tuple[GameState, Turn, int, int], priorityQueue: deque[tuple[GameState, Turn, int, int]]):
     for index, otherElement in enumerate(priorityQueue):
         if element[3] < otherElement[3] or (element[3] == otherElement[3] and element[2] >= otherElement[2]):
             priorityQueue.insert(index, element)
