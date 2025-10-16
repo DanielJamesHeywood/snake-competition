@@ -29,7 +29,11 @@ def myAI(state: GameState) -> Turn:
                 return turn
             insertInto(
                 priorityQueue,
-                (newState, turn, 1, distancesToNearestFood[newState.snake.head] + 1)
+                (
+                    newState,
+                    turn,
+                    1, distancesToNearestFood[newState.snake.head] + 1
+                )
             )
     while priorityQueue and len(priorityQueue) < 256:
         state, firstTurn, distance, distanceToNearestFood = priorityQueue.popleft()
@@ -41,7 +45,11 @@ def myAI(state: GameState) -> Turn:
                     return firstTurn
                 insertInto(
                     priorityQueue,
-                    (newState, firstTurn, newDistance, distancesToNearestFood[newState.snake.head] + newDistance)
+                    (
+                        newState,
+                        firstTurn,
+                        newDistance, distancesToNearestFood[newState.snake.head] + newDistance
+                    )
                 )
     return priorityQueue[-1][1] if priorityQueue else Turn.STRAIGHT
 
