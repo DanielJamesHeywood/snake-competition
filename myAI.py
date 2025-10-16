@@ -38,7 +38,9 @@ def getDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]])
     distancesToNearestTarget = {
         target: 0 for target in targets
     }
-    queue = deque([(target, 0) for target in targets])
+    queue = deque(
+        (target, 0) for target in targets
+    )
     while queue:
         position, distanceToNearestTarget = queue.popleft()
         newDistanceToNearestTarget = distanceToNearestTarget + 1
