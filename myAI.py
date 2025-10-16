@@ -2,7 +2,6 @@ import random
 from collections import deque
 from snake.logic import GameState, Turn, Snake, Direction
 
-from typing import Callable
 from snake.logic import DIRECTIONS
 from examples.smartAI import smartAI as enemyAI
 
@@ -34,11 +33,11 @@ def myAI(state: GameState) -> Turn:
     return priorityQueue[-1][1] if priorityQueue else Turn.STRAIGHT
 
 
-def getDistancesToNearestFood(state: GameState) -> dict[tuple[int, int], int]:
+def getDistancesToNearestFood(state):
     return getDistancesToNearestTarget(state, state.food)
 
 
-def getDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]]) -> dict[tuple[int, int], int]:
+def getDistancesToNearestTarget(state, targets):
     distancesToNearestTarget = {
         target: 0 for target in targets
     }
@@ -59,11 +58,8 @@ def getDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]])
     return distancesToNearestTarget
 
 
-def insertIntoPriorityQueueForFoodFinding(
-    priorityQueue: deque[tuple[GameState, Turn, int, int]],
-    newElement: tuple[GameState, Turn, int, int]
-):
-    def compare(lhs: tuple[GameState, Turn, int, int], rhs: tuple[GameState, Turn, int, int]) -> int:
+def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
+    def compare(lhs, rhs):
         lhDistanceToNearestFood, rhDistanceToNearestFood = lhs[3], rhs[3]
         if lhDistanceToNearestFood != rhDistanceToNearestFood:
             return -1 if lhDistanceToNearestFood < rhDistanceToNearestFood else 1
@@ -72,7 +68,7 @@ def insertIntoPriorityQueueForFoodFinding(
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
 
-def insertIntoPriorityQueue[E](priorityQueue: deque[E], newElement: E, compare: Callable[[E, E], int]):
+def insertIntoPriorityQueue(priorityQueue, newElement, compare):
     for index, element in enumerate(priorityQueue):
         if compare(newElement, element) <= 0:
             priorityQueue.insert(index, newElement)
@@ -80,7 +76,7 @@ def insertIntoPriorityQueue[E](priorityQueue: deque[E], newElement: E, compare: 
     priorityQueue.append(newElement)
 
 
-def copyGameState(state: GameState) -> GameState:
+def copyGameState(state):
     return GameState(
         width = state.width,
         height = state.height,
@@ -94,7 +90,7 @@ def copyGameState(state: GameState) -> GameState:
     )
 
 
-def copySnake(snake: Snake) -> Snake:
+def copySnake(snake):
     copy = Snake(0, 0, snake.id)
     copy.score = snake.score
     copy.isAlive = snake.isAlive
@@ -103,7 +99,7 @@ def copySnake(snake: Snake) -> Snake:
     return copy
 
 
-def moveSnake(state: GameState, turn: Turn) -> bool:
+def moveSnake(state, turn):
     state.snake.isAlive = moveAnySnake(state, state.snake, turn)
     if state.snake.isAlive:
         for index in range(len(state.enemies)):
@@ -112,7 +108,7 @@ def moveSnake(state: GameState, turn: Turn) -> bool:
     return state.snake.isAlive
 
 
-def moveEnemy(state: GameState, enemyIndex: int, turn: Turn) -> bool:
+def moveEnemy(state, enemyIndex, turn):
     enemy = state.enemies[enemyIndex]
     enemy.isAlive = moveAnySnake(state, enemy, turn)
     if not enemy.isAlive:
@@ -121,7 +117,7 @@ def moveEnemy(state: GameState, enemyIndex: int, turn: Turn) -> bool:
     return enemy.isAlive
 
 
-def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
+def moveAnySnake(state, snake, turn):
     nextHead = snake.get_next_head(turn)
     if nextHead in state.walls:
         return False
@@ -144,7 +140,7 @@ def moveAnySnake(state: GameState, snake: Snake, turn: Turn) -> bool:
     return True
 
 
-def getEnemyGameState(state: GameState, enemyIndex: int) -> GameState:
+def getEnemyGameState(state, enemyIndex):
     enemy = state.enemies[enemyIndex]
     return GameState(
         width = state.width,
