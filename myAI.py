@@ -72,6 +72,13 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
 
+def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
+    def compare(lhs, rhs):
+        lhState, lhDistanceToTail = lhs
+        rhState, rhDistanceToTail = rhs
+        return -1 if lhDistanceToTail > rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
+    insertIntoPriorityQueue(priorityQueue, newElement, compare)
+
 def insertIntoPriorityQueue(priorityQueue, newElement, compare):
     for index, element in enumerate(priorityQueue):
         if compare(newElement, element) >= 0:
