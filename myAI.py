@@ -43,9 +43,10 @@ def getDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]])
     )
     while queue:
         position, distanceToNearestTarget = queue.popleft()
+        x, y = position
         newDistanceToNearestTarget = distanceToNearestTarget + 1
         for xOffset, yOffset in DIRECTIONS:
-            newX, newY = position[0] + xOffset, position[1] + yOffset
+            newX, newY = x + xOffset, y + yOffset
             if 0 <= newX < state.width and 0 <= newY < state.height:
                 newPosition = (newX, newY)
                 if newPosition not in state.walls and newPosition not in distancesToNearestTarget:
