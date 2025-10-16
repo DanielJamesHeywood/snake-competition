@@ -79,6 +79,7 @@ def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
         return -1 if lhDistanceToTail > rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
+
 def insertIntoPriorityQueue(priorityQueue, newElement, compare):
     for index, element in enumerate(priorityQueue):
         if compare(newElement, element) >= 0:
