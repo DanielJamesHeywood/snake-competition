@@ -53,9 +53,7 @@ def insert(priorityQueue: deque[tuple[GameState, Turn, int, int]], newElement: t
         if lhDistanceToNearestFood != rhDistanceToNearestFood:
             return -1 if lhDistanceToNearestFood < rhDistanceToNearestFood else 1
         lhDistance, rhDistance = lhs[2], rhs[2]
-        if lhDistance != rhDistance:
-            return -1 if lhDistance > rhDistance else 1
-        return 0
+        return -1 if lhDistance > rhDistance else 0 if lhDistance == rhDistance else 1
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
 
