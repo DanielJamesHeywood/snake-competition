@@ -49,6 +49,7 @@ def getDistancesToNearestTarget(state: GameState, targets: set[tuple[int, int]])
                 if newPosition not in state.walls and newPosition not in distancesToNearestTarget:
                     distancesToNearestTarget[newPosition] = newDistanceToNearestTarget
                     queue.append(newPosition)
+    return distancesToNearestTarget
 
 
 def insertIntoPriorityQueueForFoodFinding(
