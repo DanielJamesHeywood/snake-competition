@@ -40,7 +40,7 @@ def getDistancesToNearestFood(state):
 
 
 def getDistancesToTail(state):
-    return getDistancesToNearestTarget(state, [state.snake.tail])
+    return getDistancesToNearestTarget(state, {state.snake.tail})
 
 
 def getDistancesToNearestTarget(state, targets):
