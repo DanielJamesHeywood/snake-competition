@@ -37,10 +37,6 @@ def getDistancesToNearestFood(state):
     return getDistancesToNearestTarget(state, state.food)
 
 
-def getDistancesToTail(state):
-    return getDistancesToNearestTarget(state, {state.snake.tail})
-
-
 def getDistancesToNearestTarget(state, targets):
     distancesToNearestTarget = {
         target: 0 for target in targets
@@ -71,14 +67,6 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
         if lhTotalDistanceToNearestFood != rhTotalDistanceToNearestFood:
             return -1 if lhTotalDistanceToNearestFood > rhTotalDistanceToNearestFood else 1
         return -1 if lhDistance < rhDistance else 0 if lhDistance == rhDistance else 1
-    insertIntoPriorityQueue(priorityQueue, newElement, compare)
-
-
-def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
-    def compare(lhs, rhs):
-        lhState, lhDistanceToTail = lhs
-        rhState, rhDistanceToTail = rhs
-        return -1 if lhDistanceToTail > rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
 
