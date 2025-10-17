@@ -37,7 +37,10 @@ def getDistanceToNearestFood(state):
 
 
 def getDistanceToNearestTarget(state, targets):
-    _1 = {position: len(enemy.body) - index for index, position in enumerate(enemy.body) for enemy in state.enemies}
+    _1 = {}
+    for enemy in state.enemies:
+        for index, position in enumerate(enemy.body):
+            _1[position] = len(enemy.body) - index
     priorityQueue = deque()
     insertIntoPriorityQueueForDistanceFinding(
         priorityQueue,
