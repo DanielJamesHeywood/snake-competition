@@ -45,14 +45,14 @@ def getDistanceToNearestTarget(state, targets):
     visited = {state.snake.head}
     while True:
         position, distance = priorityQueue.popleft()
+        if position in targets:
+            return distance
         x, y = position
         newDistance = distance + 1
         for xOffset, yOffset in DIRECTIONS:
             newX, newY = x + xOffset, y + yOffset
             if 0 <= newX < state.width and 0 <= newY < state.height:
                 newPosition = (newX, newY)
-                if newPosition in targets:
-                    return newDistance
                 if newPosition not in state.walls and newPosition not in visited:
                     visited.add(newPosition)
                     insertIntoPriorityQueueForDistanceFinding(
