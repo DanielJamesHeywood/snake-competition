@@ -33,10 +33,10 @@ def myAI(state: GameState) -> Turn:
 
 
 def getDistanceToNearestFood(state):
-    return getDistancesToNearestTarget(state, state.food)[state.snake.head]
+    return getDistanceToNearestTarget(state, state.food)
 
 
-def getDistancesToNearestTarget(state, targets):
+def getDistanceToNearestTarget(state, targets):
     distancesToNearestTarget = {
         target: 0 for target in targets
     }
@@ -54,7 +54,7 @@ def getDistancesToNearestTarget(state, targets):
                 if newPosition not in state.walls and newPosition not in distancesToNearestTarget:
                     distancesToNearestTarget[newPosition] = newDistanceToNearestTarget
                     queue.append((newPosition, newDistanceToNearestTarget))
-    return distancesToNearestTarget
+    return distancesToNearestTarget[state.snake.head]
 
 
 def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
