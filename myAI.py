@@ -13,12 +13,10 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            newDistanceToNearestFood = getDistanceToNearestFood(newState)
-            if newDistanceToNearestFood:
-                insertIntoPriorityQueueForFoodFinding(
-                    priorityQueue,
-                    (newState, turn, 1, newDistanceToNearestFood)
-                )
+            insertIntoPriorityQueueForFoodFinding(
+                priorityQueue,
+                (newState, turn, 1, getDistanceToNearestFood(newState))
+            )
     while priorityQueue and len(priorityQueue) < 256:
         state, turn, distance, distanceToNearestFood = priorityQueue.popleft()
         newDistance = distance + 1
@@ -27,12 +25,10 @@ def myAI(state: GameState) -> Turn:
             if moveSnake(newState, newTurn):
                 if newState.score > state.score:
                     return turn
-                newDistanceToNearestFood = getDistanceToNearestFood(newState)
-                if newDistanceToNearestFood:
-                    insertIntoPriorityQueueForFoodFinding(
-                        priorityQueue,
-                        (newState, turn, newDistance, newDistanceToNearestFood)
-                    )
+                insertIntoPriorityQueueForFoodFinding(
+                    priorityQueue,
+                    (newState, turn, newDistance, getDistanceToNearestFood(newState))
+                )
     return Turn.STRAIGHT
 
 
@@ -44,16 +40,14 @@ def getDistanceToNearestTarget(state, targets):
     priorityQueue = deque()
     insertIntoPriorityQueueForDistanceFinding(
         priorityQueue,
-        (state.snake.head, state.snake.direction, 0)
+        (state.snake.head, 0)
     )
     visited = {state.snake.head}
     while priorityQueue:
-        position, direction, distance = priorityQueue.popleft()
+        position, distance = priorityQueue.popleft()
         x, y = position
         newDistance = distance + 1
-        for turn in Turn:
-            newDirection = (direction + turn.value) % 4
-            xOffset, yOffset = DIRECTIONS[newDirection]
+        for xOffset, yOffset in DIRECTIONS:
             newX, newY = x + xOffset, y + yOffset
             if 0 <= newX < state.width and 0 <= newY < state.height:
                 newPosition = (newX, newY)
@@ -63,7 +57,7 @@ def getDistanceToNearestTarget(state, targets):
                     visited.add(newPosition)
                     insertIntoPriorityQueueForDistanceFinding(
                         priorityQueue,
-                        (newPosition, newDirection, newDistance)
+                        (newPosition, newDistance)
                     )
     return None
 
@@ -82,8 +76,8 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
 
 def insertIntoPriorityQueueForDistanceFinding(priorityQueue, newElement):
     def compare(lhs, rhs):
-        lhPosition, lhDirection, lhDistance = lhs
-        rhPosition, rhDirection, rhDistance = rhs
+        lhPosition, lhDistance = lhs
+        rhPosition, rhDistance = rhs
         return -1 if lhDistance < rhDistance else 0 if lhDistance == rhDistance else 1
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
