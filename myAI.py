@@ -48,7 +48,7 @@ def getDistanceToNearestTarget(state, targets):
         x, y = position
         newDistance = distance + 1
         for turn in Turn:
-            newDirection = (direction + turn) % 4
+            newDirection = (direction + turn.value) % 4
             xOffset, yOffset = DIRECTIONS[newDirection]
             newX, newY = x + xOffset, y + yOffset
             if 0 <= newX < state.width and 0 <= newY < state.height:
