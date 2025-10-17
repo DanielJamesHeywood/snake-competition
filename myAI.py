@@ -38,7 +38,7 @@ def getDistanceToNearestFood(state):
 
 def getDistanceToNearestTarget(state, targets):
     visited = {state.snake.head}
-    queue = deque(((state.snake.head, 0)))
+    queue = deque([(state.snake.head, 0)])
     while queue:
         position, distance = queue.popleft()
         x, y = position
