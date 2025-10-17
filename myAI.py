@@ -47,7 +47,9 @@ def getDistanceToNearestTarget(state, targets):
         position, direction, distance = priorityQueue.popleft()
         x, y = position
         newDistance = distance + 1
-        for xOffset, yOffset in DIRECTIONS:
+        for turn in Turn:
+            newDirection = (direction + turn) % 4
+            xOffset, yOffset = DIRECTIONS[newDirection]
             newX, newY = x + xOffset, y + yOffset
             if 0 <= newX < state.width and 0 <= newY < state.height:
                 newPosition = (newX, newY)
@@ -57,7 +59,7 @@ def getDistanceToNearestTarget(state, targets):
                     visited.add(newPosition)
                     insertIntoPriorityQueueForDistanceFinding(
                         priorityQueue,
-                        (newPosition, None, newDistance)
+                        (newPosition, newDirection, newDistance)
                     )
     return None
 
