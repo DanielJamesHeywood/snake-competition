@@ -38,9 +38,9 @@ def getDistanceToNearestFood(state):
 
 def getDistanceToNearestTarget(state, targets):
     visited = {state.snake.head}
-    queue = deque([(state.snake.head, 0)])
-    while queue:
-        position, distance = queue.popleft()
+    priorityQueue = deque([(state.snake.head, 0)])
+    while priorityQueue:
+        position, distance = priorityQueue.popleft()
         x, y = position
         newDistance = distance + 1
         for xOffset, yOffset in DIRECTIONS:
@@ -51,7 +51,10 @@ def getDistanceToNearestTarget(state, targets):
                     return newDistance
                 if newPosition not in state.walls and newPosition not in visited:
                     visited.add(newPosition)
-                    queue.append((newPosition, newDistance))
+                    insertIntoPriorityQueueForDistanceFinding(
+                        priorityQueue,
+                        (newPosition, newDistance)
+                    )
     raise Exception()
 
 
