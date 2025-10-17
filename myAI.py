@@ -17,7 +17,7 @@ def myAI(state: GameState) -> Turn:
                 priorityQueue,
                 (newState, turn, 1, getDistanceToNearestFood(newState))
             )
-    while priorityQueue and len(priorityQueue) < 256:
+    while priorityQueue:
         state, turn, distance, distanceToNearestFood = priorityQueue.popleft()
         newDistance = distance + 1
         for newTurn in Turn:
