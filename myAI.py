@@ -38,6 +38,8 @@ def getDistanceToNearestFood(state):
 
 def getDistanceToNearestTarget(state, targets):
     _1 = {}
+    for index, position in enumerate(state.snake.body):
+        _1[position] = len(state.snake.body) - index
     for enemy in state.enemies:
         for index, position in enumerate(enemy.body):
             _1[position] = len(enemy.body) - index
