@@ -58,7 +58,7 @@ def getDistanceToNearestTarget(state, targets):
                     visited.add(newPosition)
                     insertIntoPriorityQueueForDistanceFinding(
                         priorityQueue,
-                        (newPosition, max(newDistance, _1[newPosition] if newPosition in _1 else 0)
+                        (newPosition, max(newDistance, _1[newPosition] if newPosition in _1 else 0))
                     )
 
 
