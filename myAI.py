@@ -7,7 +7,6 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-    distancesToNearestFood = getDistancesToNearestFood(state)
     priorityQueue = deque()
     for turn in Turn:
         newState = copyGameState(state)
@@ -16,7 +15,7 @@ def myAI(state: GameState) -> Turn:
                 return turn
             insertIntoPriorityQueueForFoodFinding(
                 priorityQueue,
-                (newState, turn, 1, distancesToNearestFood[newState.snake.head])
+                (newState, turn, 1, getDistanceToNearestFood(newState))
             )
     while priorityQueue and len(priorityQueue) < 256:
         state, turn, distance, distanceToNearestFood = priorityQueue.popleft()
@@ -28,13 +27,13 @@ def myAI(state: GameState) -> Turn:
                     return turn
                 insertIntoPriorityQueueForFoodFinding(
                     priorityQueue,
-                    (newState, turn, newDistance, distancesToNearestFood[newState.snake.head])
+                    (newState, turn, newDistance, getDistanceToNearestFood(newState))
                 )
     return Turn.STRAIGHT
 
 
-def getDistancesToNearestFood(state):
-    return getDistancesToNearestTarget(state, state.food)
+def getDistanceToNearestFood(state):
+    return getDistancesToNearestTarget(state, state.food)[state.snake.head]
 
 
 def getDistancesToNearestTarget(state, targets):
