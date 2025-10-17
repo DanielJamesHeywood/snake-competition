@@ -38,6 +38,7 @@ def getDistanceToNearestFood(state):
 
 def getDistanceToNearestTarget(state, targets):
     visited = {state.snake.head}
+    priorityQueue = deque()
     insertIntoPriorityQueueForDistanceFinding(
         priorityQueue,
         (state.snake.head, 0)
