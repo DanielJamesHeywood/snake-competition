@@ -39,13 +39,13 @@ def getDistanceToNearestFood(state):
 
 
 def getDistanceToNearestTarget(state, targets):
-    _1 = {}
+    minimumDistancesToPositionsInBodies = {}
     for index, position in enumerate(state.snake.body):
-        _1[position] = len(state.snake.body) - index - 1
+        minimumDistancesToPositionsInBodies[position] = len(state.snake.body) - index - 1
     for enemy in state.enemies:
         if enemy.isAlive:
             for index, position in enumerate(enemy.body):
-                _1[position] = len(enemy.body) - index
+                minimumDistancesToPositionsInBodies[position] = len(enemy.body) - index
     priorityQueue = deque()
     insertIntoPriorityQueueForDistanceFinding(
         priorityQueue,
@@ -66,7 +66,7 @@ def getDistanceToNearestTarget(state, targets):
                     visited.add(newPosition)
                     insertIntoPriorityQueueForDistanceFinding(
                         priorityQueue,
-                        (newPosition, max(newDistance, _1[newPosition] if newPosition in _1 else 0))
+                        (newPosition, max(newDistance, minimumDistancesToPositionsInBodies[newPosition] if newPosition in minimumDistancesToPositionsInBodies else 0))
                     )
 
 
