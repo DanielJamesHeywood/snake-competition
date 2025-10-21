@@ -47,6 +47,7 @@ def getDistanceToTarget(state, target):
 
 
 def getDistanceToNearestTarget(state, targets):
+    
     minimumDistancesToCellsInBodies = {}
     minimumDistanceToHead = len(state.snake.body) - 1
     for index, position in enumerate(state.snake.body):
@@ -66,7 +67,9 @@ def getDistanceToNearestTarget(state, targets):
         priorityQueue,
         (state.snake.head, 0)
     )
+    
     visited = {state.snake.head}
+    
     while True:
         position, distance = priorityQueue.popleft()
         if position in targets:
