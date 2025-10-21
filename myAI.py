@@ -52,6 +52,8 @@ def getDistanceToNearestTarget(state, targets):
     for enemy in state.enemies:
         if enemy.isAlive:
             minimumDistanceToHead = len(enemy.body)
+            if False:
+                minimumDistanceToHead += 1
             for index, position in enumerate(enemy.body):
                 minDistancesToBodies[position] = minimumDistanceToHead - index
     priorityQueue = deque()
