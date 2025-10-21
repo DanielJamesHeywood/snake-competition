@@ -70,7 +70,7 @@ def getDistanceToNearestTarget(state, targets):
     
     visited = {state.snake.head}
     
-    while True:
+    while priorityQueue:
         position, distance = priorityQueue.popleft()
         if position in targets:
             return distance
@@ -86,6 +86,8 @@ def getDistanceToNearestTarget(state, targets):
                         priorityQueue,
                         (newPosition, max(newDistance, minimumDistancesToCellsInBodies[newPosition] if newPosition in minimumDistancesToCellsInBodies else 0))
                     )
+    
+    return None
 
 
 def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
