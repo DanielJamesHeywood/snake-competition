@@ -169,15 +169,21 @@ def moveEnemy(state, enemyIndex, turn):
 
 
 def moveAnySnake(state, snake, turn):
+    
     nextHead = snake.get_next_head(turn)
+    
     if nextHead in state.walls:
         return False
+    
     if not (0 <= nextHead[0] < state.width and 0 <= nextHead[1] < state.height):
         return False
+    
     if nextHead in snake.body and nextHead != snake.body[-1]:
         return False
+    
     if snake is not state.snake and nextHead in state.snake.body:
         return False
+    
     for enemy in state.enemies:
         if enemy is not snake and enemy.isAlive and nextHead in enemy.body:
             return False
@@ -189,6 +195,7 @@ def moveAnySnake(state, snake, turn):
         snake.score += 1
         if snake is state.snake:
             state.score += 1
+    
     return True
 
 
