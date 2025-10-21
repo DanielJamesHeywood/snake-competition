@@ -80,6 +80,7 @@ def getDistanceToNearestTarget(state, targets):
     visited = {state.snake.head}
     
     while priorityQueue:
+        
         position, distance = priorityQueue.popleft()
         
         if position in targets:
