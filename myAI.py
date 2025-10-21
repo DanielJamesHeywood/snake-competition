@@ -45,7 +45,6 @@ def myAI(state: GameState) -> Turn:
 
 
 def tailIsReachable(state):
-
     tail = state.snake.body[-1]
     
     priorityQueue = deque()
@@ -62,6 +61,7 @@ def tailIsReachable(state):
                 newDistanceToTail = getDistanceToTarget(newState, tail)
                 if newDistanceToTail == 0:
                     return True
+                    
                 insertIntoPriorityQueueForTailFinding(
                     priorityQueue,
                     (newState, newDistanceToTail)
@@ -79,7 +79,6 @@ def getDistanceToTarget(state, target):
 
 
 def getDistanceToNearestTarget(state, targets):
-    
     minimumDistancesToCellsInBodies = {}
     
     minimumDistanceToHead = len(state.snake.body) - 1
@@ -88,7 +87,6 @@ def getDistanceToNearestTarget(state, targets):
     
     for enemy in state.enemies:
         if enemy.isAlive:
-            
             minimumDistanceToHead = len(enemy.body)
             
             x, y = state.snake.head
@@ -106,9 +104,7 @@ def getDistanceToNearestTarget(state, targets):
     )
     
     visited = {state.snake.head}
-    
     while priorityQueue:
-        
         position, distance = priorityQueue.popleft()
         
         if position in targets:
@@ -119,15 +115,10 @@ def getDistanceToNearestTarget(state, targets):
             newX, newY = x + xOffset, y + yOffset
 
             if 0 <= newX < state.width and 0 <= newY < state.height:
-                
                 newPosition = (newX, newY)
-                
                 if newPosition not in state.walls and newPosition not in visited:
-                    
                     visited.add(newPosition)
-        
                     newDistance = distance + 1
-                    
                     if newPosition in minimumDistancesToCellsInBodies:
                         minimumDistance = minimumDistancesToCellsInBodies[newPosition]
                         if newDistance < minimumDistance:
@@ -144,16 +135,13 @@ def getDistanceToNearestTarget(state, targets):
 def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
     
     def compare(lhs, rhs):
-        
         _, _, lhDistance, lhDistanceToNearestFood = lhs
         lhTotalDistanceToNearestFood = lhDistance + lhDistanceToNearestFood
-        
         _, _, rhDistance, rhDistanceToNearestFood = rhs
         rhTotalDistanceToNearestFood = rhDistance + rhDistanceToNearestFood
         
         if lhTotalDistanceToNearestFood != rhTotalDistanceToNearestFood:
             return -1 if lhTotalDistanceToNearestFood < rhTotalDistanceToNearestFood else 1
-            
         return -1 if lhDistance > rhDistance else 0 if lhDistance == rhDistance else 1
         
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
@@ -162,16 +150,13 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
 def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
     
     def compare(lhs, rhs):
-        
         _, lhDistance, lhDistanceToTail = lhs
         lhTotalDistanceToTail = lhDistance + lhDistanceToTail
-        
         _, rhDistance, rhDistanceToTail = rhs
         rhTotalDistanceToTail = rhDistance + rhDistanceToTail
         
         if lhTotalDistanceToTail != rhTotalDistanceToTail:
             return -1 if lhTotalDistanceToTail < rhTotalDistanceToTail else 1
-            
         return -1 if lhDistance > rhDistance else 0 if lhDistance == rhDistance else 1
         
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
@@ -180,9 +165,7 @@ def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
 def insertIntoPriorityQueueForDistanceFinding(priorityQueue, newElement):
     
     def compare(lhs, rhs):
-        
         _, lhDistance = lhs
-        
         _, rhDistance = rhs
         
         return -1 if lhDistance < rhDistance else 0 if lhDistance == rhDistance else 1
@@ -191,9 +174,7 @@ def insertIntoPriorityQueueForDistanceFinding(priorityQueue, newElement):
 
 
 def insertIntoPriorityQueue(priorityQueue, newElement, compare):
-    
     for index, element in enumerate(priorityQueue):
-        
         if compare(newElement, element) <= 0:
             priorityQueue.insert(index, newElement)
             return
@@ -225,11 +206,9 @@ def copySnake(snake):
 
 
 def moveSnake(state, turn):
-    
-    state.snake.isAlive = moveAnySnake(state, state.snake, turn)
-    
+    # if (state.snake.isAlive := moveAnySnake(state, state.snake, turn):
+    state.snake.isAlive = moveAnySnake(state, state.snake, turn)    # Walrus this
     if state.snake.isAlive:
-        
         for index in range(len(state.enemies)):
             if state.enemies[index].isAlive:
                 moveEnemy(state, index, enemyAI(getEnemyGameState(state, index)))
@@ -238,13 +217,9 @@ def moveSnake(state, turn):
 
 
 def moveEnemy(state, enemyIndex, turn):
-    
     enemy = state.enemies[enemyIndex]
-    
     enemy.isAlive = moveAnySnake(state, enemy, turn)
-    
     if not enemy.isAlive:
-        
         for position in enemy.body:
             state.food.add(position)
 
@@ -252,7 +227,6 @@ def moveEnemy(state, enemyIndex, turn):
 
 
 def moveAnySnake(state, snake, turn):
-    
     nextHead = snake.get_next_head(turn)
     
     if nextHead in state.walls:
@@ -272,13 +246,9 @@ def moveAnySnake(state, snake, turn):
             return False
             
     willEat = nextHead in state.food
-    
     snake.move(turn, grow = willEat)
-    
     if willEat:
-        
         state.food.remove(nextHead)
-        
         snake.score += 1
         if snake is state.snake:
             state.score += 1
@@ -287,7 +257,6 @@ def moveAnySnake(state, snake, turn):
 
 
 def getEnemyGameState(state, enemyIndex):
-    
     enemy = state.enemies[enemyIndex]
     
     return GameState(
