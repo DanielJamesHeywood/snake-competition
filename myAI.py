@@ -163,11 +163,16 @@ def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
     
     def compare(lhs, rhs):
         
-        _, lhDistanceToTail = lhs
+        _, lhDistance, lhDistanceToTail = lhs
+        lhTotalDistanceToTail = lhDistance + lhDistanceToTail
         
-        _, rhDistanceToTail = rhs
+        _, rhDistance, rhDistanceToTail = rhs
+        rhTotalDistanceToTail = rhDistance + rhDistanceToTail
         
-        return -1 if lhDistanceToTail < rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
+        if lhTotalDistanceToTail != rhTotalDistanceToTail:
+            return -1 if lhTotalDistanceToTail < rhTotalDistanceToTail else 1
+            
+        return -1 if lhDistance > rhDistance else 0 if lhDistance == rhDistance else 1
         
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
