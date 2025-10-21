@@ -158,10 +158,13 @@ def insertIntoPriorityQueueForDistanceFinding(priorityQueue, newElement):
 
 
 def insertIntoPriorityQueue(priorityQueue, newElement, compare):
+    
     for index, element in enumerate(priorityQueue):
+        
         if compare(newElement, element) <= 0:
             priorityQueue.insert(index, newElement)
             return
+    
     priorityQueue.append(newElement)
 
 
@@ -189,20 +192,29 @@ def copySnake(snake):
 
 
 def moveSnake(state, turn):
+    
     state.snake.isAlive = moveAnySnake(state, state.snake, turn)
+    
     if state.snake.isAlive:
+        
         for index in range(len(state.enemies)):
             if state.enemies[index].isAlive:
                 moveEnemy(state, index, enemyAI(getEnemyGameState(state, index)))
+
     return state.snake.isAlive
 
 
 def moveEnemy(state, enemyIndex, turn):
+    
     enemy = state.enemies[enemyIndex]
+    
     enemy.isAlive = moveAnySnake(state, enemy, turn)
+    
     if not enemy.isAlive:
+        
         for position in enemy.body:
             state.food.add(position)
+
     return enemy.isAlive
 
 
@@ -227,9 +239,13 @@ def moveAnySnake(state, snake, turn):
             return False
             
     willEat = nextHead in state.food
+    
     snake.move(turn, grow = willEat)
+    
     if willEat:
+        
         state.food.remove(nextHead)
+        
         snake.score += 1
         if snake is state.snake:
             state.score += 1
@@ -238,7 +254,9 @@ def moveAnySnake(state, snake, turn):
 
 
 def getEnemyGameState(state, enemyIndex):
+    
     enemy = state.enemies[enemyIndex]
+    
     return GameState(
         width = state.width,
         height = state.height,
