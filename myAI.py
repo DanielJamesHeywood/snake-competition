@@ -103,7 +103,9 @@ def getDistanceToNearestTarget(state, targets):
                     newDistance = distance + 1
                     
                     if newPosition in minimumDistancesToCellsInBodies:
-                        newDistance = max(newDistance, minimumDistancesToCellsInBodies[newPosition])
+                        minimumDistance = minimumDistancesToCellsInBodies[newPosition]
+                        if newDistance < minimumDistance:
+                            newDistance = minimumDistance
                     
                     insertIntoPriorityQueueForDistanceFinding(
                         priorityQueue,
