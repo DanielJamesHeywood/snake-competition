@@ -56,6 +56,7 @@ def getDistanceToNearestTarget(state, targets):
     minimumDistanceToHead = len(state.snake.body) - 1
     for index, position in enumerate(state.snake.body):
         minimumDistancesToCellsInBodies[position] = minimumDistanceToHead - index
+        
     x, y = state.snake.head
     for enemy in state.enemies:
         if enemy.isAlive:
@@ -76,10 +77,13 @@ def getDistanceToNearestTarget(state, targets):
     
     while priorityQueue:
         position, distance = priorityQueue.popleft()
+        
         if position in targets:
             return distance
+            
         x, y = position
         newDistance = distance + 1
+        
         for xOffset, yOffset in DIRECTIONS:
             newX, newY = x + xOffset, y + yOffset
             if 0 <= newX < state.width and 0 <= newY < state.height:
