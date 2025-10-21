@@ -87,11 +87,9 @@ def getDistanceToNearestTarget(state, targets):
             return distance
             
         x, y = position
-        
         for xOffset, yOffset in DIRECTIONS:
-            
             newX, newY = x + xOffset, y + yOffset
-            
+
             if 0 <= newX < state.width and 0 <= newY < state.height:
                 
                 newPosition = (newX, newY)
