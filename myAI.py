@@ -45,26 +45,31 @@ def myAI(state: GameState) -> Turn:
 
 
 def tailIsReachable(state):
+    
     tail = state.snake.body[-1]
     
     priorityQueue = deque()
     insertIntoPriorityQueueForTailFinding(
         priorityQueue,
-        (state, getDistanceToTarget(state, tail))
+        (state, 0, getDistanceToTarget(state, tail))
     )
     
     while priorityQueue:
-        state, _ = priorityQueue.popleft()
+        
+        state, distance, _ = priorityQueue.popleft()
+        newDistance = distance + 1
         for turn in Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
+                
                 newDistanceToTail = getDistanceToTarget(newState, tail)
+                
                 if newDistanceToTail == 0:
                     return True
                     
                 insertIntoPriorityQueueForTailFinding(
                     priorityQueue,
-                    (newState, newDistanceToTail)
+                    (newState, newDistance, newDistanceToTail)
                 )
     
     return False
