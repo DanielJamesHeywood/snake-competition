@@ -39,6 +39,10 @@ def getDistanceToNearestFood(state):
     return getDistanceToNearestTarget(state, state.food)
 
 
+def getDistanceToTarget(state, target):
+    return getDistanceToNearestTarget(state, {target})
+
+
 def getDistanceToNearestTarget(state, targets):
     minDistancesToBodies = {}
     for index, position in enumerate(state.snake.body):
