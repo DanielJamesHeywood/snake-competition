@@ -45,17 +45,17 @@ def getDistanceToTarget(state, target):
 
 
 def getDistanceToNearestTarget(state, targets):
-    minDistancesToBodies = {}
+    minimumDistancesToCellsInBodies = {}
     minimumDistanceToHead = len(state.snake.body) - 1
     for index, position in enumerate(state.snake.body):
-        minDistancesToBodies[position] = minimumDistanceToHead - index
+        minimumDistancesToCellsInBodies[position] = minimumDistanceToHead - index
     for enemy in state.enemies:
         if enemy.isAlive:
             minimumDistanceToHead = len(enemy.body)
             if False:
                 minimumDistanceToHead += 1
             for index, position in enumerate(enemy.body):
-                minDistancesToBodies[position] = minimumDistanceToHead - index
+                minimumDistancesToCellsInBodies[position] = minimumDistanceToHead - index
     priorityQueue = deque()
     insertIntoPriorityQueueForDistanceFinding(
         priorityQueue,
@@ -76,7 +76,7 @@ def getDistanceToNearestTarget(state, targets):
                     visited.add(newPosition)
                     insertIntoPriorityQueueForDistanceFinding(
                         priorityQueue,
-                        (newPosition, max(newDistance, minDistancesToBodies[newPosition] if newPosition in minDistancesToBodies else 0))
+                        (newPosition, max(newDistance, minimumDistancesToCellsInBodies[newPosition] if newPosition in minimumDistancesToCellsInBodies else 0))
                     )
 
 
