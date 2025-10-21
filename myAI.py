@@ -15,10 +15,12 @@ def myAI(state: GameState) -> Turn:
             if newState.score > state.score:
                 return turn
             else:
-                insertIntoPriorityQueueForFoodFinding(
-                    priorityQueue,
-                    (newState, turn, 1, getDistanceToNearestFood(newState))
-                )
+                newDistanceToNearestFood = getDistanceToNearestFood(newState)
+                if newDistanceToNearestFood:
+                    insertIntoPriorityQueueForFoodFinding(
+                        priorityQueue,
+                        (newState, turn, 1, getDistanceToNearestFood(newState))
+                    )
                 
     timeout = time.time() + 1
     while priorityQueue and time.time() < timeout:
@@ -30,10 +32,12 @@ def myAI(state: GameState) -> Turn:
                 if newState.score > state.score:
                     return turn
                 else:
-                    insertIntoPriorityQueueForFoodFinding(
-                        priorityQueue,
-                        (newState, turn, newDistance, getDistanceToNearestFood(newState))
-                    )
+                    newDistanceToNearestFood = getDistanceToNearestFood(newState)
+                    if newDistanceToNearestFood:
+                        insertIntoPriorityQueueForFoodFinding(
+                            priorityQueue,
+                            (newState, turn, newDistance, getDistanceToNearestFood(newState))
+                        )
                     
     return Turn.STRAIGHT
 
