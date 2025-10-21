@@ -13,7 +13,7 @@ def myAI(state: GameState) -> Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
-                if tailIsReachable(newState):
+                if headIsRereachable(newState):
                     return turn
             else:
                 newDistanceToNearestFood = getDistanceToNearestFood(newState)
@@ -30,7 +30,7 @@ def myAI(state: GameState) -> Turn:
             newState = state if newTurn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, newTurn):
                 if newState.score > state.score:
-                    if tailIsReachable(newState):
+                    if headIsRereachable(newState):
                         return turn
                 else:
                     newDistanceToNearestFood = getDistanceToNearestFood(newState)
