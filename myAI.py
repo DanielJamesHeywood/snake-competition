@@ -42,25 +42,34 @@ def myAI(state: GameState) -> Turn:
     return Turn.STRAIGHT
 
 
-def tailIsReachable(state):
-    tail = state.snake.body[-1]
+def headIsRereachable(state):
+
+    head = state.snake.head
+
     priorityQueue = deque()
-    insertIntoPriorityQueueForTailFinding(
+    insertIntoPriorityQueueForHeadFinding(
         priorityQueue,
-        (state, getDistanceToTarget(state, tail))
+        (state, getDistanceToTarget(state, head))
     )
+
     while priorityQueue:
+
         state, _ = priorityQueue.popleft()
+
         for turn in Turn:
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
-                newDistanceToTail = getDistanceToTarget(newState, tail)
-                if newDistanceToTail == 0:
+
+                newDistanceToHead = getDistanceToTarget(newState, head)
+
+                if newDistanceToHead == 0:
                     return True
-                insertIntoPriorityQueueForTailFinding(
+
+                insertIntoPriorityQueueForHeadFinding(
                     priorityQueue,
-                    (newState, newDistanceToTail)
+                    (newState, newDistanceToHead)
                 )
+
     return False
 
 
@@ -155,15 +164,15 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
 
-def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
+def insertIntoPriorityQueueForHeadFinding(priorityQueue, newElement):
 
     def compare(lhs, rhs):
 
-        _, lhDistanceToTail = lhs
+        _, lhDistanceToHead = lhs
 
-        _, rhDistanceToTail = rhs
+        _, rhDistanceToHead = rhs
 
-        return -1 if lhDistanceToTail < rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
+        return -1 if lhDistanceToHead < rhDistanceToHead else 0 if lhDistanceToHead == rhDistanceToHead else 1
 
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
