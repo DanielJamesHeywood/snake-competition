@@ -90,11 +90,14 @@ def getDistanceToNearestTarget(state, targets):
         newDistance = distance + 1
         
         for xOffset, yOffset in DIRECTIONS:
+            
             newX, newY = x + xOffset, y + yOffset
             if 0 <= newX < state.width and 0 <= newY < state.height:
                 newPosition = (newX, newY)
                 if newPosition not in state.walls and newPosition not in visited:
+                    
                     visited.add(newPosition)
+                    
                     insertIntoPriorityQueueForDistanceFinding(
                         priorityQueue,
                         (newPosition, max(newDistance, minimumDistancesToCellsInBodies[newPosition] if newPosition in minimumDistancesToCellsInBodies else 0))
