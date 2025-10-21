@@ -46,12 +46,14 @@ def getDistanceToTarget(state, target):
 
 def getDistanceToNearestTarget(state, targets):
     minDistancesToBodies = {}
+    minimumDistanceToHead = len(state.snake.body) - 1
     for index, position in enumerate(state.snake.body):
-        minDistancesToBodies[position] = len(state.snake.body) - index - 1
+        minDistancesToBodies[position] = minimumDistanceToHead - index
     for enemy in state.enemies:
         if enemy.isAlive:
+            minimumDistanceToHead = len(enemy.body)
             for index, position in enumerate(enemy.body):
-                minDistancesToBodies[position] = len(enemy.body) - index
+                minDistancesToBodies[position] = minimumDistanceToHead - index
     priorityQueue = deque()
     insertIntoPriorityQueueForDistanceFinding(
         priorityQueue,
