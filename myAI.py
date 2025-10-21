@@ -13,7 +13,8 @@ def myAI(state: GameState) -> Turn:
         newState = copyGameState(state)
         if moveSnake(newState, turn):
             if newState.score > state.score:
-                return turn
+                if tailIsReachable(newState):
+                    return turn
             else:
                 newDistanceToNearestFood = getDistanceToNearestFood(newState)
                 if newDistanceToNearestFood:
@@ -30,7 +31,8 @@ def myAI(state: GameState) -> Turn:
             newState = state if newTurn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, newTurn):
                 if newState.score > state.score:
-                    return turn
+                    if tailIsReachable(newState):
+                        return turn
                 else:
                     newDistanceToNearestFood = getDistanceToNearestFood(newState)
                     if newDistanceToNearestFood:
@@ -40,6 +42,32 @@ def myAI(state: GameState) -> Turn:
                         )
                     
     return Turn.STRAIGHT
+
+
+def tailIsReachable(state):
+
+    tail = state.snake.body[-1]
+    
+    priorityQueue = deque()
+    insertIntoPriorityQueueForTailFinding(
+        priorityQueue,
+        (state, getDistanceToTarget(state, tail))
+    )
+    
+    while priorityQueue:
+        state, _ = priorityQueue.popleft()
+        for turn in Turn:
+            newState = state if turn == Turn.RIGHT else copyGameState(state)
+            if moveSnake(newState, turn):
+                newDistanceToTail = getDistanceToTarget(newState, tail)
+                if newDistanceToTail == 0:
+                    return True
+                insertIntoPriorityQueueForTailFinding(
+                    priorityQueue,
+                    (newState, newDistanceToTail)
+                )
+    
+    return False
 
 
 def getDistanceToNearestFood(state):
