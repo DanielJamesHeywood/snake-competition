@@ -116,12 +116,16 @@ def getDistanceToNearestTarget(state, targets):
 def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
     
     def compare(lhs, rhs):
+        
         _, _, lhDistance, lhDistanceToNearestFood = lhs
         lhTotalDistanceToNearestFood = lhDistance + lhDistanceToNearestFood
+        
         _, _, rhDistance, rhDistanceToNearestFood = rhs
         rhTotalDistanceToNearestFood = rhDistance + rhDistanceToNearestFood
+        
         if lhTotalDistanceToNearestFood != rhTotalDistanceToNearestFood:
             return -1 if lhTotalDistanceToNearestFood < rhTotalDistanceToNearestFood else 1
+            
         return -1 if lhDistance > rhDistance else 0 if lhDistance == rhDistance else 1
         
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
@@ -130,8 +134,11 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
 def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
     
     def compare(lhs, rhs):
+        
         _, lhDistanceToTail = lhs
+        
         _, rhDistanceToTail = rhs
+        
         return -1 if lhDistanceToTail < rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
         
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
@@ -140,8 +147,11 @@ def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
 def insertIntoPriorityQueueForDistanceFinding(priorityQueue, newElement):
     
     def compare(lhs, rhs):
+        
         _, lhDistance = lhs
+        
         _, rhDistance = rhs
+        
         return -1 if lhDistance < rhDistance else 0 if lhDistance == rhDistance else 1
         
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
