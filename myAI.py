@@ -1,8 +1,8 @@
 import random
-import time
 from collections import deque
 from snake.logic import GameState, Turn, Snake, Direction
 
+import time
 from snake.logic import DIRECTIONS
 from examples.smartAI import smartAI as enemyAI
 
@@ -14,26 +14,24 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
             if newState.score > state.score:
                 return turn
-            else:
-                insertIntoPriorityQueueForFoodFinding(
-                    priorityQueue,
-                    (newState, turn, 1, getDistanceToNearestFood(newState))
-                )
-                
+            insertIntoPriorityQueueForFoodFinding(
+                priorityQueue,
+                (newState, turn, 1, getDistanceToNearestFood(newState))
+            )
+
     timeout = time.time() + 10
     while priorityQueue and time.time() < timeout:
-        state, turn, distance, distanceToNearestFood = priorityQueue.popleft()
+        state, turn, distance, _ = priorityQueue.popleft()
         newDistance = distance + 1
         for newTurn in Turn:
             newState = state if newTurn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, newTurn):
                 if newState.score > state.score:
                     return turn
-                else:
-                    insertIntoPriorityQueueForFoodFinding(
-                        priorityQueue,
-                        (newState, turn, newDistance, getDistanceToNearestFood(newState))
-                    )
+                insertIntoPriorityQueueForFoodFinding(
+                    priorityQueue,
+                    (newState, turn, newDistance, getDistanceToNearestFood(newState))
+                )
     return Turn.STRAIGHT
 
 
@@ -42,13 +40,13 @@ def getDistanceToNearestFood(state):
 
 
 def getDistanceToNearestTarget(state, targets):
-    minimumDistancesToPositionsInBodies = {}
+    minDistancesToBodies = {}
     for index, position in enumerate(state.snake.body):
-        minimumDistancesToPositionsInBodies[position] = len(state.snake.body) - index - 1
+        minDistancesToBodies[position] = len(state.snake.body) - index - 1
     for enemy in state.enemies:
         if enemy.isAlive:
             for index, position in enumerate(enemy.body):
-                minimumDistancesToPositionsInBodies[position] = len(enemy.body) - index
+                minDistancesToBodies[position] = len(enemy.body) - index
     priorityQueue = deque()
     insertIntoPriorityQueueForDistanceFinding(
         priorityQueue,
@@ -69,15 +67,15 @@ def getDistanceToNearestTarget(state, targets):
                     visited.add(newPosition)
                     insertIntoPriorityQueueForDistanceFinding(
                         priorityQueue,
-                        (newPosition, max(newDistance, minimumDistancesToPositionsInBodies[newPosition] if newPosition in minimumDistancesToPositionsInBodies else 0))
+                        (newPosition, max(newDistance, minDistancesToBodies[newPosition] if newPosition in minDistancesToBodies else 0))
                     )
 
 
 def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
     def compare(lhs, rhs):
-        lhState, lhTurn, lhDistance, lhDistanceToNearestFood = lhs
+        _, _, lhDistance, lhDistanceToNearestFood = lhs
         lhTotalDistanceToNearestFood = lhDistance + lhDistanceToNearestFood
-        rhState, rhTurn, rhDistance, rhDistanceToNearestFood = rhs
+        _, _, rhDistance, rhDistanceToNearestFood = rhs
         rhTotalDistanceToNearestFood = rhDistance + rhDistanceToNearestFood
         if lhTotalDistanceToNearestFood != rhTotalDistanceToNearestFood:
             return -1 if lhTotalDistanceToNearestFood < rhTotalDistanceToNearestFood else 1
@@ -87,8 +85,8 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
 
 def insertIntoPriorityQueueForDistanceFinding(priorityQueue, newElement):
     def compare(lhs, rhs):
-        lhPosition, lhDistance = lhs
-        rhPosition, rhDistance = rhs
+        _, lhDistance = lhs
+        _, rhDistance = rhs
         return -1 if lhDistance < rhDistance else 0 if lhDistance == rhDistance else 1
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
@@ -127,7 +125,7 @@ def copySnake(snake):
 def moveSnake(state, turn):
     state.snake.isAlive = moveAnySnake(state, state.snake, turn)
     if state.snake.isAlive:
-        for index in range(len(state.enemies)):
+        for index, _ in enumerate(state.enemies):
             if state.enemies[index].isAlive:
                 moveEnemy(state, index, enemyAI(getEnemyGameState(state, index)))
     return state.snake.isAlive
