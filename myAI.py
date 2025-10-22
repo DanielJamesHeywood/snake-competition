@@ -35,7 +35,7 @@ def myAI(state: GameState) -> Turn:
     if not any(turnCounts.values()):
         return Turn.STRAIGHT
 
-    while len(filter(None, turnCounts.values())) >= 2:
+    while len(list(filter(None, turnCounts.values()))) >= 2:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
