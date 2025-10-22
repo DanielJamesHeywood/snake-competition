@@ -2,7 +2,6 @@ import random
 from collections import deque
 from snake.logic import GameState, Turn, Snake, Direction
 
-import time
 from snake.logic import DIRECTIONS
 from examples.smartAI import smartAI as enemyAI
 
