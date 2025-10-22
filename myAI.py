@@ -10,6 +10,8 @@ def myAI(state: GameState) -> Turn:
 
     priorityQueue = deque()
 
+    turnCounts = {turn: 0 for turn in Turn}
+
     for turn in Turn:
 
         newState = copyGameState(state)
@@ -25,12 +27,16 @@ def myAI(state: GameState) -> Turn:
                         (newState, turn, 1, newDistanceToNearestFood)
                     )
 
+                    turnCounts[turn] += 1
+
             elif headIsRereachable(newState):
                 return turn
 
     while priorityQueue:
 
         state, turn, distance, _ = priorityQueue.popleft()
+
+        turnCounts[turn] -= 1
 
         newDistance = distance + 1
 
@@ -48,6 +54,8 @@ def myAI(state: GameState) -> Turn:
                             priorityQueue,
                             (newState, turn, newDistance, newDistanceToNearestFood)
                         )
+
+                        turnCounts[turn] += 1
 
                 elif headIsRereachable(newState):
                     return turn
