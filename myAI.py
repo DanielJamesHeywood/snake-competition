@@ -62,7 +62,7 @@ def headIsRereachable(state):
     priorityQueue = deque()
     insertIntoPriorityQueueForHeadFinding(
         priorityQueue,
-        (state, getDistanceToTarget(state, head))
+        (state, getDistanceToNearestTarget(state, {head}))
     )
 
     while priorityQueue:
@@ -74,7 +74,7 @@ def headIsRereachable(state):
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
 
-                newDistanceToHead = getDistanceToTarget(newState, head)
+                newDistanceToHead = getDistanceToNearestTarget(newState, {head})
 
                 if newDistanceToHead == 0:
                     return True
@@ -89,10 +89,6 @@ def headIsRereachable(state):
 
 def getDistanceToNearestFood(state):
     return getDistanceToNearestTarget(state, state.food)
-
-
-def getDistanceToTarget(state, target):
-    return getDistanceToNearestTarget(state, {target})
 
 
 def getDistanceToNearestTarget(state, targets):
