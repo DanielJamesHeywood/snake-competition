@@ -16,12 +16,15 @@ def myAI(state: GameState) -> Turn:
         if moveSnake(newState, turn):
 
             if newState.score <= state.score:
+
                 newDistanceToNearestFood = getDistanceToNearestFood(newState)
                 if newDistanceToNearestFood:
+
                     insertIntoPriorityQueueForFoodFinding(
                         priorityQueue,
                         (newState, turn, 1, newDistanceToNearestFood)
                     )
+
             elif headIsRereachable(newState):
                 return turn
 
@@ -37,12 +40,15 @@ def myAI(state: GameState) -> Turn:
             if moveSnake(newState, newTurn):
 
                 if newState.score <= state.score:
+
                     newDistanceToNearestFood = getDistanceToNearestFood(newState)
                     if newDistanceToNearestFood:
+
                         insertIntoPriorityQueueForFoodFinding(
                             priorityQueue,
                             (newState, turn, newDistance, newDistanceToNearestFood)
                         )
+
                 elif headIsRereachable(newState):
                     return turn
 
