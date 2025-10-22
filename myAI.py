@@ -56,6 +56,7 @@ def headIsRereachable(state):
         state, _ = priorityQueue.popleft()
 
         for turn in Turn:
+
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
 
