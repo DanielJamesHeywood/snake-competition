@@ -32,7 +32,10 @@ def myAI(state: GameState) -> Turn:
             elif headIsRereachable(newState):
                 return turn
 
-    while priorityQueue:
+    if not any(turnCounts.values()):
+        return Turn.STRAIGHT
+
+    while len(filter(None, turnCounts.values())) >= 2:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -60,7 +63,8 @@ def myAI(state: GameState) -> Turn:
                 elif headIsRereachable(newState):
                     return turn
 
-    return Turn.STRAIGHT
+    _, turn, _, _ = priorityQueue.popleft()
+    return turn
 
 
 def headIsRereachable(state):
