@@ -109,9 +109,9 @@ def getDistanceToNearestFood(state):
 
 def getDistanceToNearestTarget(state, targets):
 
-    minimumDistancesToCellsInBodies = {}
-
     x, y = state.snake.head
+
+    minimumDistancesToCellsInBodies = {}
 
     minimumDistanceToHead = len(state.snake.body)
 
