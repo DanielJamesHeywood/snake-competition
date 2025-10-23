@@ -81,14 +81,14 @@ def headIsRereachable(state):
 
         state, tail, _ = priorityQueue.popleft()
 
-        newTail = tail.copy()
-        newTail.appendleft(state.snake.body[-1])
-
         for turn in Turn:
 
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if not moveSnake(newState, turn):
                 continue
+
+            newTail = tail.copy()
+            newTail.appendleft(state.snake.body[-1])
 
             if newState.snake.head in newTail:
                 return True
