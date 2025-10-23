@@ -107,19 +107,18 @@ def getDistanceToNearestTarget(state, targets):
 
     minimumDistancesToCellsInBodies = {}
 
+    minimumDistanceToHead = len(state.snake.body)
+
+    if minimumDistanceToHead % 2 != 0:
+        minimumDistanceToHead += 1
+
     for index, position in enumerate(state.snake.body):
-
-        minimumDistanceToHead = len(state.snake.body) - 1
-
-        if minimumDistanceToHead % 2 != 0:
-            minimumDistanceToHead += 1
-
         minimumDistancesToCellsInBodies[position] = minimumDistanceToHead - index
 
     for enemy in state.enemies:
         if enemy.isAlive:
 
-            minimumDistanceToHead = len(enemy.body)
+            minimumDistanceToHead = len(enemy.body) + 1
 
             x, y = state.snake.head
             enemyX, enemyY = enemy.head
