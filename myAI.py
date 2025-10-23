@@ -150,8 +150,6 @@ def getDistanceToNearestTarget(state, targets):
                 newPosition = (newX, newY)
                 if newPosition not in state.walls and newPosition not in visited:
 
-                    visited.add(newPosition)
-
                     newDistance = distance + 1
 
                     if newPosition in minimumDistancesToCellsInBodies:
@@ -163,6 +161,8 @@ def getDistanceToNearestTarget(state, targets):
                         priorityQueue,
                         (newPosition, newDistance)
                     )
+
+                    visited.add(newPosition)
 
     return None
 
