@@ -42,7 +42,7 @@ def myAI(state: GameState) -> Turn:
 
         turnCounts[turn] -= 1
 
-        newDistance = distance + 1
+        newDistance = distance + 5
 
         for newTurn in Turn:
 
@@ -87,17 +87,18 @@ def headIsRereachable(state):
         for turn in Turn:
 
             newState = state if turn == Turn.RIGHT else copyGameState(state)
-            if moveSnake(newState, turn):
+            if not moveSnake(newState, turn):
+                continue
 
-                if newState.snake.head in newTail:
-                    return True
+            if newState.snake.head in newTail:
+                return True
 
-                newDistanceToHead = getDistanceToNearestTarget(newState, newState.snake.body + newTail)
+            newDistanceToHead = getDistanceToNearestTarget(newState, newState.snake.body + newTail)
 
-                insertIntoPriorityQueueForTailFinding(
-                    priorityQueue,
-                    (newState, newTail, newDistanceToHead)
-                )
+            insertIntoPriorityQueueForTailFinding(
+                priorityQueue,
+                (newState, newTail, newDistanceToHead)
+            )
 
     return False
 
@@ -143,21 +144,25 @@ def getDistanceToNearestTarget(state, targets):
     for turn in Turn:
         xOffset, yOffset = DIRECTIONS[(state.snake.direction + turn.value) % 4]
         newX, newY = x + xOffset, y + yOffset
-        if 0 <= newX < state.width and 0 <= newY < state.height:
-            newPosition = (newX, newY)
-            if newPosition not in state.walls:
+        
+        if not (0 <= newX < state.width and 0 <= newY < state.height):
+            continue
+            
+        newPosition = (newX, newY)
+        if newPosition in state.walls:
+            continue
+    
+        newDistance = 1
 
-                    newDistance = 1
+        if newPosition in minimumDistancesToCellsInBodies:
+            newDistance = minimumDistancesToCellsInBodies[newPosition]
 
-                    if newPosition in minimumDistancesToCellsInBodies:
-                        newDistance = minimumDistancesToCellsInBodies[newPosition]
+        insertIntoPriorityQueueForDistanceFinding(
+            priorityQueue,
+            (newPosition, newDistance)
+        )
 
-                    insertIntoPriorityQueueForDistanceFinding(
-                        priorityQueue,
-                        (newPosition, newDistance)
-                    )
-
-                    visited.add(newPosition)
+        visited.add(newPosition)
 
     while priorityQueue:
 
@@ -169,23 +174,26 @@ def getDistanceToNearestTarget(state, targets):
         x, y = position
         for xOffset, yOffset in DIRECTIONS:
             newX, newY = x + xOffset, y + yOffset
-            if 0 <= newX < state.width and 0 <= newY < state.height:
-                newPosition = (newX, newY)
-                if newPosition not in state.walls and newPosition not in visited:
+            if not (0 <= newX < state.width and 0 <= newY < state.height):
+                continue
+                
+            newPosition = (newX, newY)
+            if newPosition in state.walls or newPosition in visited:
+                continue
 
-                    newDistance = distance + 1
+            newDistance = distance + 1
 
-                    if newPosition in minimumDistancesToCellsInBodies:
-                        minimumDistance = minimumDistancesToCellsInBodies[newPosition]
-                        if newDistance < minimumDistance:
-                            newDistance = minimumDistance
+            if newPosition in minimumDistancesToCellsInBodies:
+                minimumDistance = minimumDistancesToCellsInBodies[newPosition]
+                if newDistance < minimumDistance:
+                    newDistance = minimumDistance
 
-                    insertIntoPriorityQueueForDistanceFinding(
-                        priorityQueue,
-                        (newPosition, newDistance)
-                    )
+            insertIntoPriorityQueueForDistanceFinding(
+                priorityQueue,
+                (newPosition, newDistance)
+            )
 
-                    visited.add(newPosition)
+            visited.add(newPosition)
 
     return None
 
