@@ -144,10 +144,8 @@ def getDistanceToNearestTarget(state, targets):
     for turn in Turn:
         xOffset, yOffset = DIRECTIONS[(state.snake.direction + turn.value) % 4]
         newX, newY = x + xOffset, y + yOffset
-        
         if not (0 <= newX < state.width and 0 <= newY < state.height):
             continue
-            
         newPosition = (newX, newY)
         if newPosition in state.walls:
             continue
@@ -176,7 +174,6 @@ def getDistanceToNearestTarget(state, targets):
             newX, newY = x + xOffset, y + yOffset
             if not (0 <= newX < state.width and 0 <= newY < state.height):
                 continue
-                
             newPosition = (newX, newY)
             if newPosition in state.walls or newPosition in visited:
                 continue
