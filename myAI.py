@@ -111,6 +111,8 @@ def getDistanceToNearestTarget(state, targets):
 
     minimumDistancesToCellsInBodies = {}
 
+    x, y = state.snake.head
+
     minimumDistanceToHead = len(state.snake.body)
 
     if minimumDistanceToHead % 2 != 0:
@@ -124,7 +126,6 @@ def getDistanceToNearestTarget(state, targets):
 
             minimumDistanceToHead = len(enemy.body) + 1
 
-            x, y = state.snake.head
             enemyX, enemyY = enemy.head
             if minimumDistanceToHead % 2 != (abs(x - enemyX) + abs(y - enemyY)) % 2:
                 minimumDistanceToHead += 1
@@ -140,7 +141,6 @@ def getDistanceToNearestTarget(state, targets):
 
     visited = {state.snake.head}
 
-    x, y = state.snake.head
     for turn in Turn:
         xOffset, yOffset = DIRECTIONS[(state.snake.direction + turn.value) % 4]
         newX, newY = x + xOffset, y + yOffset
@@ -170,6 +170,7 @@ def getDistanceToNearestTarget(state, targets):
             return distance
 
         x, y = position
+        
         for xOffset, yOffset in DIRECTIONS:
             newX, newY = x + xOffset, y + yOffset
             if not (0 <= newX < state.width and 0 <= newY < state.height):
