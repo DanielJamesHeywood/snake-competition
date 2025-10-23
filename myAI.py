@@ -15,22 +15,23 @@ def myAI(state: GameState) -> Turn:
     for turn in Turn:
 
         newState = copyGameState(state)
-        if moveSnake(newState, turn):
+        if not moveSnake(newState, turn):
+            continue
 
-            if newState.score <= state.score:
+        if newState.score <= state.score:
 
-                newDistanceToNearestFood = getDistanceToNearestFood(newState)
-                if newDistanceToNearestFood:
+            newDistanceToNearestFood = getDistanceToNearestFood(newState)
+            if newDistanceToNearestFood:
 
-                    insertIntoPriorityQueueForFoodFinding(
-                        priorityQueue,
-                        (newState, turn, 1, newDistanceToNearestFood)
-                    )
+                insertIntoPriorityQueueForFoodFinding(
+                    priorityQueue,
+                    (newState, turn, 1, newDistanceToNearestFood)
+                )
 
-                    turnCounts[turn] += 1
+                turnCounts[turn] += 1
 
-            elif headIsRereachable(newState):
-                return turn
+        elif headIsRereachable(newState):
+            return turn
 
     if not any(turnCounts.values()):
         return Turn.STRAIGHT
@@ -46,22 +47,23 @@ def myAI(state: GameState) -> Turn:
         for newTurn in Turn:
 
             newState = state if newTurn == Turn.RIGHT else copyGameState(state)
-            if moveSnake(newState, newTurn):
+            if not moveSnake(newState, newTurn):
+                continue
 
-                if newState.score <= state.score:
+            if newState.score <= state.score:
 
-                    newDistanceToNearestFood = getDistanceToNearestFood(newState)
-                    if newDistanceToNearestFood:
+                newDistanceToNearestFood = getDistanceToNearestFood(newState)
+                if newDistanceToNearestFood:
 
-                        insertIntoPriorityQueueForFoodFinding(
-                            priorityQueue,
-                            (newState, turn, newDistance, newDistanceToNearestFood)
-                        )
+                    insertIntoPriorityQueueForFoodFinding(
+                        priorityQueue,
+                        (newState, turn, newDistance, newDistanceToNearestFood)
+                    )
 
-                        turnCounts[turn] += 1
+                    turnCounts[turn] += 1
 
-                elif headIsRereachable(newState):
-                    return turn
+            elif headIsRereachable(newState):
+                return turn
 
     _, turn, _, _ = priorityQueue.popleft()
     return turn
