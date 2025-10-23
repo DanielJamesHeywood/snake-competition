@@ -38,7 +38,7 @@ def myAI(state: GameState) -> Turn:
         else:
             defaultTurn = turn
 
-    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn):
+    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn) and len(priorityQueue) <= 225:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -81,7 +81,7 @@ def headIsRereachable(state):
         (state, deque(), getDistanceToNearestTarget(state, state.snake.body))
     )
 
-    while priorityQueue:
+    while priorityQueue and len(priorityQueue) <= 15:
 
         state, tail, _ = priorityQueue.popleft()
 
