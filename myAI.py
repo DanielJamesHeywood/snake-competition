@@ -70,7 +70,7 @@ def myAI(state: GameState) -> Turn:
 def headIsRereachable(state):
 
     priorityQueue = deque()
-    insertIntoPriorityQueueForHeadFinding(
+    insertIntoPriorityQueueForTailFinding(
         priorityQueue,
         (state, deque(), getDistanceToNearestTarget(state, state.snake.body))
     )
@@ -92,7 +92,7 @@ def headIsRereachable(state):
 
                 newDistanceToHead = getDistanceToNearestTarget(newState, newState.snake.body + newTail)
 
-                insertIntoPriorityQueueForHeadFinding(
+                insertIntoPriorityQueueForTailFinding(
                     priorityQueue,
                     (newState, newTail, newDistanceToHead)
                 )
@@ -206,15 +206,15 @@ def insertIntoPriorityQueueForFoodFinding(priorityQueue, newElement):
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
 
-def insertIntoPriorityQueueForHeadFinding(priorityQueue, newElement):
+def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
 
     def compare(lhs, rhs):
 
-        _, _, lhDistanceToBody = lhs
+        _, _, lhDistanceToTail = lhs
 
-        _, _, rhDistanceToBody = rhs
+        _, _, rhDistanceToTail = rhs
 
-        return -1 if lhDistanceToBody < rhDistanceToBody else 0 if lhDistanceToBody == rhDistanceToBody else 1
+        return -1 if lhDistanceToTail < rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
 
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
