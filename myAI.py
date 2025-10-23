@@ -69,31 +69,32 @@ def myAI(state: GameState) -> Turn:
 
 def headIsRereachable(state):
 
-    head = state.snake.head
-
     priorityQueue = deque()
     insertIntoPriorityQueueForHeadFinding(
         priorityQueue,
-        (state, getDistanceToNearestTarget(state, {head}))
+        (state, deque(), getDistanceToNearestTarget(state, state.snake.body))
     )
 
     while priorityQueue:
 
-        state, _ = priorityQueue.popleft()
+        state, tail, _ = priorityQueue.popleft()
+
+        newTail = tail.copy()
+        newTail.appendleft(state.snake.body[-1])
 
         for turn in Turn:
 
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if moveSnake(newState, turn):
 
-                newDistanceToHead = getDistanceToNearestTarget(newState, {head})
-
-                if newDistanceToHead == 0:
+                if newState.snake.head in newTail:
                     return True
+
+                newDistanceToHead = getDistanceToNearestTarget(newState, newState.snake.body + newTail)
 
                 insertIntoPriorityQueueForHeadFinding(
                     priorityQueue,
-                    (newState, newDistanceToHead)
+                    (newState, newTail, newDistanceToHead)
                 )
 
     return False
@@ -209,11 +210,11 @@ def insertIntoPriorityQueueForHeadFinding(priorityQueue, newElement):
 
     def compare(lhs, rhs):
 
-        _, lhDistanceToHead = lhs
+        _, _, lhDistanceToBody = lhs
 
-        _, rhDistanceToHead = rhs
+        _, _, rhDistanceToBody = rhs
 
-        return -1 if lhDistanceToHead < rhDistanceToHead else 0 if lhDistanceToHead == rhDistanceToHead else 1
+        return -1 if lhDistanceToBody < rhDistanceToBody else 0 if lhDistanceToBody == rhDistanceToBody else 1
 
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
