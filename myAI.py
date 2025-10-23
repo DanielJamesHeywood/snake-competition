@@ -93,7 +93,7 @@ def headIsRereachable(state):
             if newState.snake.head in newTail:
                 return True
 
-            newDistanceToHead = getDistanceToNearestTarget(newState, newState.snake.body + newTail)
+            newDistanceToHead = getDistanceToNearestTarget(newState, set(newState.snake.body + newTail))
 
             insertIntoPriorityQueueForTailFinding(
                 priorityQueue,
