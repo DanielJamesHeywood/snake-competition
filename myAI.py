@@ -131,10 +131,30 @@ def getDistanceToNearestTarget(state, targets):
     priorityQueue = deque()
     insertIntoPriorityQueueForDistanceFinding(
         priorityQueue,
-        (state.snake.head, 0)
+        (state.snake.head, minimumDistancesToCellsInBodies[state.snake.head])
     )
 
     visited = {state.snake.head}
+
+    x, y = state.snake.head
+    for turn in Turn:
+        xOffset, yOffset = DIRECTIONS[(state.snake.direction + turn.value) % 4]
+        newX, newY = x + xOffset, y + yOffset
+        if 0 <= newX < state.width and 0 <= newY < state.height:
+            newPosition = (newX, newY)
+            if newPosition not in state.walls:
+
+                    newDistance = 1
+
+                    if newPosition in minimumDistancesToCellsInBodies:
+                        newDistance = minimumDistancesToCellsInBodies[newPosition]
+
+                    insertIntoPriorityQueueForDistanceFinding(
+                        priorityQueue,
+                        (newPosition, newDistance)
+                    )
+
+                    visited.add(newPosition)
 
     while priorityQueue:
 
