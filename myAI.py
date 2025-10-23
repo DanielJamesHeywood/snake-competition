@@ -42,7 +42,7 @@ def myAI(state: GameState) -> Turn:
 
         turnCounts[turn] -= 1
 
-        newDistance = distance + 5
+        newDistance = distance + 1
 
         for newTurn in Turn:
 
