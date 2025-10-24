@@ -81,7 +81,7 @@ def headIsRereachable(state):
         (state, deque(), getDistanceToNearestTarget(state, state.snake.body))
     )
 
-    while priorityQueue and len(priorityQueue) <= 15:
+    while priorityQueue and len(priorityQueue) <= 18:
 
         state, tail, _ = priorityQueue.popleft()
 
