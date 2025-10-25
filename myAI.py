@@ -77,14 +77,14 @@ def headIsRereachable(state):
 
     priorityQueue = deque()
     
-    newDistanceToHead = getDistanceToNearestTarget(state, state.snake.body_set)
+    distanceToTail = getDistanceToNearestTarget(state, state.snake.body_set)
     
-    if newDistanceToHead == 1:
+    if distanceToTail <= 2:
         return True
 
     insertIntoPriorityQueueForTailFinding(
         priorityQueue,
-        (state, newDistanceToHead)
+        (state, distanceToTail)
     )
 
     while priorityQueue and len(priorityQueue) <= 64:
@@ -99,7 +99,7 @@ def headIsRereachable(state):
 
             newDistanceToTail = getDistanceToNearestTarget(newState, newState.snake.body_set)
             
-            if newDistanceToTail == 1:
+            if newDistanceToTail <= 2:
                 return True
 
             insertIntoPriorityQueueForTailFinding(
