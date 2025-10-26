@@ -38,7 +38,7 @@ def myAI(state: GameState) -> Turn:
         else:
             defaultTurn = turn
 
-    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn) and len(priorityQueue) <= 384:
+    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn) and len(priorityQueue) <= 512:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
