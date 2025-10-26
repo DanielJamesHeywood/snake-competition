@@ -38,7 +38,7 @@ def myAI(state: GameState) -> Turn:
         else:
             defaultTurn = turn
 
-    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn) and len(priorityQueue) <= 256:
+    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn) and len(priorityQueue) <= 225:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -76,20 +76,14 @@ def myAI(state: GameState) -> Turn:
 def headIsRereachable(state):
 
     priorityQueue = deque()
-    
-    distanceToTail = getDistanceToNearestTarget(state, state.snake.body_set)
-    
-    if distanceToTail <= 2:
-        return True
-
     insertIntoPriorityQueueForTailFinding(
         priorityQueue,
-        (state, distanceToTail)
+        (state, deque(), getDistanceToNearestTarget(state, state.snake.body))
     )
 
-    while priorityQueue and len(priorityQueue) <= 64:
+    while priorityQueue and len(priorityQueue) <= 25:
 
-        state, _ = priorityQueue.popleft()
+        state, tail, _ = priorityQueue.popleft()
 
         for turn in Turn:
 
@@ -97,14 +91,17 @@ def headIsRereachable(state):
             if not moveSnake(newState, turn):
                 continue
 
-            newDistanceToTail = getDistanceToNearestTarget(newState, newState.snake.body_set)
-            
-            if newDistanceToTail <= 2:
+            newTail = tail.copy()
+            newTail.appendleft(state.snake.body[-1])
+
+            if newState.snake.head in newTail:
                 return True
+
+            newDistanceToHead = getDistanceToNearestTarget(newState, set(newState.snake.body + newTail))
 
             insertIntoPriorityQueueForTailFinding(
                 priorityQueue,
-                (newState, newDistanceToTail)
+                (newState, newTail, newDistanceToHead)
             )
 
     return False
@@ -225,9 +222,9 @@ def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
 
     def compare(lhs, rhs):
 
-        _, lhDistanceToTail = lhs
+        _, _, lhDistanceToTail = lhs
 
-        _, rhDistanceToTail = rhs
+        _, _, rhDistanceToTail = rhs
 
         return -1 if lhDistanceToTail < rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
 
