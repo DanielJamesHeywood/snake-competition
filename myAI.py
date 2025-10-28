@@ -38,6 +38,9 @@ def myAI(state: GameState) -> Turn:
         elif not turnWhereHeadIsNotRereachable:
             turnWhereHeadIsNotRereachable = turn
 
+    if not any(turnCounts.values()):
+        return Turn.STRAIGHT
+
     while any(turnCounts[turn] for turn in Turn if turn != turnWhereHeadIsNotRereachable) if turnWhereHeadIsNotRereachable else len(list(filter(None, turnCounts.values()))) >= 2 and len(priorityQueue) <= 450:
 
         state, turn, distance, _ = priorityQueue.popleft()
