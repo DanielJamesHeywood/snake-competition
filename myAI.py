@@ -12,7 +12,7 @@ def myAI(state: GameState) -> Turn:
 
     turnCounts = {turn: 0 for turn in Turn}
 
-    turnWhereHeadIsNotRereachable = None
+    defaultTurn = Turn.STRAIGHT
 
     for turn in Turn:
 
@@ -35,13 +35,10 @@ def myAI(state: GameState) -> Turn:
         elif headIsRereachable(newState):
             return turn
             
-        elif not turnWhereHeadIsNotRereachable:
-            turnWhereHeadIsNotRereachable = turn
+        else:
+            defaultTurn = turn
 
-    if not any(turnCounts.values()):
-        return Turn.STRAIGHT
-
-    while (any(turnCounts[turn] for turn in Turn if turn != turnWhereHeadIsNotRereachable) if turnWhereHeadIsNotRereachable else len(list(filter(None, turnCounts.values()))) >= 2) and len(priorityQueue) <= 256:
+    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn) and len(priorityQueue) <= 512:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -70,14 +67,10 @@ def myAI(state: GameState) -> Turn:
             elif headIsRereachable(newState):
                 return turn
             
-            elif not turnWhereHeadIsNotRereachable:
-                turnWhereHeadIsNotRereachable = turn
+            else:
+                defaultTurn = turn
 
-    if turnWhereHeadIsNotRereachable:
-        return turnWhereHeadIsNotRereachable
-
-    _, turn, _, _ = priorityQueue.popleft()
-    return turn
+    return defaultTurn
 
 
 def headIsRereachable(state):
@@ -88,7 +81,7 @@ def headIsRereachable(state):
         (state, deque(), getDistanceToNearestTarget(state, state.snake.body))
     )
 
-    while priorityQueue and len(priorityQueue) <= 128:
+    while priorityQueue and len(priorityQueue) <= 32:
 
         state, tail, _ = priorityQueue.popleft()
 
