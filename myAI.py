@@ -38,7 +38,7 @@ def myAI(state: GameState) -> Turn:
         else:
             defaultTurn = turn
 
-    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn) and len(priorityQueue) <= 256:
+    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn):
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -87,7 +87,7 @@ def headIsRereachable(state):
         (state, distanceToTail)
     )
 
-    while priorityQueue and len(priorityQueue) <= 64:
+    while priorityQueue:
 
         state, _ = priorityQueue.popleft()
 
