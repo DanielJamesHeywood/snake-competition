@@ -32,7 +32,7 @@ def myAI(state: GameState) -> Turn:
 
                 turnCounts[turn] += 1
 
-        elif headIsRereachable(newState):
+        elif snakeIsImmortal(newState):
             return turn
             
         elif not turnWhereSnakeIsMortal:
@@ -67,7 +67,7 @@ def myAI(state: GameState) -> Turn:
 
                     turnCounts[turn] += 1
 
-            elif headIsRereachable(newState):
+            elif snakeIsImmortal(newState):
                 return turn
             
             elif not turnWhereSnakeIsMortal:
@@ -80,7 +80,7 @@ def myAI(state: GameState) -> Turn:
     return turn
 
 
-def headIsRereachable(state):
+def snakeIsImmortal(state):
 
     priorityQueue = deque()
     
