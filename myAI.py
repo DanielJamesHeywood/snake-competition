@@ -84,7 +84,7 @@ def snakeIsImmortal(state):
 
     priorityQueue = deque()
     
-    distanceToTail = getDistanceToBody(state)
+    distanceToTail = getDistanceToTail(state)
     
     if distanceToTail <= 2:
         return True
@@ -104,7 +104,7 @@ def snakeIsImmortal(state):
             if not moveSnake(newState, turn):
                 continue
 
-            newDistanceToTail = getDistanceToBody(newState)
+            newDistanceToTail = getDistanceToTail(newState)
             
             if newDistanceToTail <= 2:
                 return True
@@ -121,7 +121,7 @@ def getDistanceToNearestFood(state):
     return getDistanceToNearestTarget(state, state.food)
 
 
-def getDistanceToBody(state):
+def getDistanceToTail(state):
     return getDistanceToNearestTarget(state, state.snake.body_set)
 
 
