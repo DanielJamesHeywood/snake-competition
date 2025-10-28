@@ -12,7 +12,7 @@ def myAI(state: GameState) -> Turn:
 
     turnCounts = {turn: 0 for turn in Turn}
 
-    defaultTurn = Turn.STRAIGHT
+    turnWhereHeadIsNotRereachable = None
 
     for turn in Turn:
 
@@ -35,10 +35,10 @@ def myAI(state: GameState) -> Turn:
         elif headIsRereachable(newState):
             return turn
             
-        else:
-            defaultTurn = turn
+        elif not turnWhereHeadIsNotRereachable:
+            turnWhereHeadIsNotRereachable = turn
 
-    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn):
+    while any(turnCounts[turn] for turn in Turn if turn != turnWhereHeadIsNotRereachable) if turnWhereHeadIsNotRereachable else len(list(filter(None, turnCounts.values()))) >= 2:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -67,10 +67,14 @@ def myAI(state: GameState) -> Turn:
             elif headIsRereachable(newState):
                 return turn
             
-            else:
-                defaultTurn = turn
+            elif not turnWhereHeadIsNotRereachable:
+                turnWhereHeadIsNotRereachable = turn
 
-    return defaultTurn
+    if turnWhereHeadIsNotRereachable:
+        return turnWhereHeadIsNotRereachable
+
+    _, turn, _, _ = priorityQueue.popleft()
+    return turn
 
 
 def headIsRereachable(state):
