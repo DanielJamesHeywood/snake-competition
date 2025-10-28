@@ -12,7 +12,7 @@ def myAI(state: GameState) -> Turn:
 
     turnCounts = {turn: 0 for turn in Turn}
 
-    turnWhereSnakeIsMortal = None
+    defaultTurn = Turn.STRAIGHT
 
     for turn in Turn:
 
@@ -35,13 +35,10 @@ def myAI(state: GameState) -> Turn:
         elif snakeIsImmortal(newState):
             return turn
             
-        elif not turnWhereSnakeIsMortal:
-            turnWhereSnakeIsMortal = turn
+        else:
+            defaultTurn = turn
 
-    if not any(turnCounts.values()):
-        return Turn.STRAIGHT
-
-    while any(turnCounts[turn] for turn in Turn if turn != turnWhereSnakeIsMortal) if turnWhereSnakeIsMortal else len(list(filter(None, turnCounts.values()))) >= 2:
+    while any(turnCounts[turn] for turn in Turn if turn != defaultTurn):
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -70,14 +67,10 @@ def myAI(state: GameState) -> Turn:
             elif snakeIsImmortal(newState):
                 return turn
             
-            elif not turnWhereSnakeIsMortal:
-                turnWhereSnakeIsMortal = turn
+            else:
+                defaultTurn = turn
 
-    if turnWhereSnakeIsMortal:
-        return turnWhereSnakeIsMortal
-
-    _, turn, _, _ = priorityQueue.popleft()
-    return turn
+    return defaultTurn
 
 
 def snakeIsImmortal(state):
