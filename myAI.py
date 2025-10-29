@@ -84,12 +84,12 @@ def snakeIsImmortal(state):
 
     insertIntoPriorityQueueForTailFinding(
         priorityQueue,
-        (state, distance)
+        (state, None, distance)
     )
 
     while priorityQueue:
 
-        state, _ = priorityQueue.popleft()
+        state, _, _ = priorityQueue.popleft()
 
         for turn in Turn:
 
@@ -104,7 +104,7 @@ def snakeIsImmortal(state):
 
             insertIntoPriorityQueueForTailFinding(
                 priorityQueue,
-                (newState, newDistance)
+                (newState, None, newDistance)
             )
 
     return False
@@ -229,9 +229,9 @@ def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
 
     def compare(lhs, rhs):
 
-        _, lhDistance = lhs
+        _, _, lhDistance = lhs
 
-        _, rhDistance = rhs
+        _, _, rhDistance = rhs
 
         return -1 if lhDistance < rhDistance else 0 if lhDistance == rhDistance else 1
 
