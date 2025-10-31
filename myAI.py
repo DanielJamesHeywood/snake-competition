@@ -32,7 +32,7 @@ def myAI(state: GameState) -> Turn:
 
                 turnCounts[turn] += 1
 
-        elif snakeIsImmortal(newState):
+        elif headIsRereachable(newState):
             return turn
             
         else:
@@ -67,7 +67,7 @@ def myAI(state: GameState) -> Turn:
 
                     turnCounts[turn] += 1
 
-            elif snakeIsImmortal(newState):
+            elif headIsRereachable(newState):
                 return turn
             
             else:
