@@ -73,6 +73,9 @@ def myAI(state: GameState) -> Turn:
             else:
                 turnWhereSnakeIsMortal = turn
 
+    if turnWhereSnakeIsMortal:
+        return turnWhereSnakeIsMortal
+
     _, turn, _, _ = priorityQueue.popleft()
     return turn
 
