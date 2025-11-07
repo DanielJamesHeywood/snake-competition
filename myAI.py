@@ -271,7 +271,7 @@ def copyGameState(state):
             copySnake(enemy) for enemy in state.enemies
         ],
         food = state.food.copy(),
-        walls = state.walls.copy(),
+        walls = state.walls,
         score = state.score
     )
 
