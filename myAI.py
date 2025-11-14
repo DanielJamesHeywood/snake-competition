@@ -32,7 +32,7 @@ def myAI(state: GameState) -> Turn:
 
                 turnCounts[turn] += 1
 
-        elif snakeIsImmortal(newState):
+        elif tailIsRereachable(newState):
             return turn
             
         else:
@@ -67,7 +67,7 @@ def myAI(state: GameState) -> Turn:
 
                     turnCounts[turn] += 1
 
-            elif snakeIsImmortal(newState):
+            elif tailIsRereachable(newState):
                 return turn
             
             else:
@@ -80,23 +80,17 @@ def myAI(state: GameState) -> Turn:
     return turn
 
 
-def snakeIsImmortal(state):
+def tailIsRereachable(state):
 
     priorityQueue = deque()
-    
-    distance = getDistanceToTail(state)
-    
-    if distance <= 2:
-        return True
-
     insertIntoPriorityQueueForTailFinding(
         priorityQueue,
-        (state, None, distance)
+        (state, deque(), getDistanceToNearestTarget(state, state.snake.body))
     )
 
     while priorityQueue:
 
-        state, _, _ = priorityQueue.popleft()
+        state, tail, _ = priorityQueue.popleft()
 
         for turn in Turn:
 
@@ -104,14 +98,17 @@ def snakeIsImmortal(state):
             if not moveSnake(newState, turn):
                 continue
 
-            newDistance = getDistanceToTail(newState)
-            
-            if newDistance <= 2:
+            newTail = tail.copy()
+            newTail.appendleft(state.snake.body[-1])
+
+            if newState.snake.head in newTail:
                 return True
+
+            newDistanceToHead = getDistanceToNearestTarget(newState, set(newState.snake.body + newTail))
 
             insertIntoPriorityQueueForTailFinding(
                 priorityQueue,
-                (newState, None, newDistance)
+                (newState, newTail, newDistanceToHead)
             )
 
     return False
@@ -119,10 +116,6 @@ def snakeIsImmortal(state):
 
 def getDistanceToNearestFood(state):
     return getDistanceToNearestTarget(state, state.food)
-
-
-def getDistanceToTail(state):
-    return getDistanceToNearestTarget(state, state.snake.body_set)
 
 
 def getDistanceToNearestTarget(state, targets):
@@ -236,11 +229,11 @@ def insertIntoPriorityQueueForTailFinding(priorityQueue, newElement):
 
     def compare(lhs, rhs):
 
-        _, _, lhDistance = lhs
+        _, _, lhDistanceToTail = lhs
 
-        _, _, rhDistance = rhs
+        _, _, rhDistanceToTail = rhs
 
-        return -1 if lhDistance < rhDistance else 0 if lhDistance == rhDistance else 1
+        return -1 if lhDistanceToTail < rhDistanceToTail else 0 if lhDistanceToTail == rhDistanceToTail else 1
 
     insertIntoPriorityQueue(priorityQueue, newElement, compare)
 
@@ -277,8 +270,8 @@ def copyGameState(state):
         enemies = [
             copySnake(enemy) for enemy in state.enemies
         ],
-        food = state.food.copy(),
-        walls = state.walls.copy(),
+        food = state.food,
+        walls = state.walls,
         score = state.score
     )
 
@@ -313,6 +306,8 @@ def moveEnemy(state, enemyIndex, turn):
 
     if not enemy.isAlive:
 
+        state.food = state.food.copy()
+
         for position in enemy.body:
             state.food.add(position)
 
@@ -344,6 +339,8 @@ def moveAnySnake(state, snake, turn):
     snake.move(turn, grow = willEat)
 
     if willEat:
+
+        state.food = state.food.copy()
 
         state.food.remove(nextHead)
 
