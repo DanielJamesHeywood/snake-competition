@@ -98,7 +98,7 @@ def tailIsReachable(state):
             if not moveSnake(newState, turn):
                 continue
 
-            newTail = tail.copy() if turn == Turn.RIGHT else tail
+            newTail = tail if turn == Turn.RIGHT else tail.copy()
             newTail.appendleft(state.snake.body[-1])
 
             if newState.snake.head in newTail:
@@ -112,10 +112,6 @@ def tailIsReachable(state):
             )
 
     return False
-
-
-def getDistanceToNearestFood(state):
-    return getDistanceToNearestTarget(state, state.food)
 
 
 def getDistanceToNearestTarget(state, targets):
