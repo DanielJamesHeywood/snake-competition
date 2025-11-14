@@ -114,6 +114,10 @@ def tailIsReachable(state):
     return False
 
 
+def getDistanceToNearestFood(state):
+    return getDistanceToNearestTarget(state, state.food)
+
+
 def getDistanceToNearestTarget(state, targets):
 
     x, y = state.snake.head
