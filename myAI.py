@@ -12,7 +12,7 @@ def myAI(state: GameState) -> Turn:
 
     turnCounts = {turn: 0 for turn in Turn}
 
-    turnWhereSnakeIsMortal = None
+    turnWhereTailIsReachable = None
 
     for turn in Turn:
 
@@ -32,16 +32,16 @@ def myAI(state: GameState) -> Turn:
 
                 turnCounts[turn] += 1
 
-        elif headIsRereachable(newState):
+        elif tailIsReachable(newState):
             return turn
             
         else:
-            turnWhereSnakeIsMortal = turn
+            turnWhereTailIsReachable = turn
 
     if not any(turnCounts.values()):
         return Turn.STRAIGHT
 
-    while (any(turnCounts[turn] for turn in Turn if turn != turnWhereSnakeIsMortal) if turnWhereSnakeIsMortal else len(list(filter(None, turnCounts.values()))) >= 2) and len(priorityQueue) <= 416:
+    while (any(turnCounts[turn] for turn in Turn if turn != turnWhereTailIsReachable) if turnWhereTailIsReachable else len(list(filter(None, turnCounts.values()))) >= 2) and len(priorityQueue) <= 416:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -67,25 +67,25 @@ def myAI(state: GameState) -> Turn:
 
                     turnCounts[turn] += 1
 
-            elif headIsRereachable(newState):
+            elif tailIsReachable(newState):
                 return turn
             
             else:
-                turnWhereSnakeIsMortal = turn
+                turnWhereTailIsReachable = turn
 
-    if turnWhereSnakeIsMortal:
-        return turnWhereSnakeIsMortal
+    if turnWhereTailIsReachable:
+        return turnWhereTailIsReachable
 
     _, turn, _, _ = priorityQueue.popleft()
     return turn
 
 
-def headIsRereachable(state):
+def tailIsReachable(state):
 
     priorityQueue = deque()
     insertIntoPriorityQueueForTailFinding(
         priorityQueue,
-        (state, deque(), getDistanceToNearestTarget(state, state.snake.body))
+        (state, deque(), getDistanceToNearestTarget(state, set(state.snake.body)))
     )
 
     while priorityQueue and len(priorityQueue) <= 48:
@@ -98,7 +98,7 @@ def headIsRereachable(state):
             if not moveSnake(newState, turn):
                 continue
 
-            newTail = tail.copy()
+            newTail = tail.copy() if turn == Turn.RIGHT else tail
             newTail.appendleft(state.snake.body[-1])
 
             if newState.snake.head in newTail:
