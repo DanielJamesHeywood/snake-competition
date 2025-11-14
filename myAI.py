@@ -270,7 +270,7 @@ def copyGameState(state):
         enemies = [
             copySnake(enemy) for enemy in state.enemies
         ],
-        food = state.food.copy(),
+        food = state.food,
         walls = state.walls,
         score = state.score
     )
@@ -306,6 +306,8 @@ def moveEnemy(state, enemyIndex, turn):
 
     if not enemy.isAlive:
 
+        state.food = state.food.copy()
+
         for position in enemy.body:
             state.food.add(position)
 
@@ -337,6 +339,8 @@ def moveAnySnake(state, snake, turn):
     snake.move(turn, grow = willEat)
 
     if willEat:
+
+        state.food = state.food.copy()
 
         state.food.remove(nextHead)
 
