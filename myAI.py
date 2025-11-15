@@ -7,7 +7,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-
+    
     score = state.score
 
     priorityQueue = deque()
@@ -96,15 +96,16 @@ def tailIsReachable(state):
 
         for turn in Turn:
 
-            _1 = state.snake.body[-1]
+            oldTail = state.snake.body[-1]
 
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if not moveSnake(newState, turn):
                 continue
 
-            if _1 not in newTail:
-                newTail = tail if turn == Turn.RIGHT else tail.copy()
-                newTail.appendleft(_1)
+            newTail = tail
+            if oldTail not in newTail:
+                newTail = newTail if turn == Turn.RIGHT else newTail.copy()
+                newTail.appendleft(oldTail)
 
             if newState.snake.head in newTail:
                 return True
