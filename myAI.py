@@ -7,7 +7,7 @@ from examples.smartAI import smartAI as enemyAI
 
 
 def myAI(state: GameState) -> Turn:
-
+    
     score = state.score
 
     priorityQueue = deque()
@@ -43,7 +43,7 @@ def myAI(state: GameState) -> Turn:
     if not any(turnCounts.values()):
         return Turn.STRAIGHT
 
-    while (any(turnCounts[turn] for turn in Turn if turn != turnWhereTailIsReachable) if turnWhereTailIsReachable else len(list(filter(None, turnCounts.values()))) >= 2) and len(priorityQueue) <= 384:
+    while (any(turnCounts[turn] for turn in Turn if turn != turnWhereTailIsReachable) if turnWhereTailIsReachable else len(list(filter(None, turnCounts.values()))) >= 2) and len(priorityQueue) <= 256:
 
         state, turn, distance, _ = priorityQueue.popleft()
 
@@ -90,21 +90,22 @@ def tailIsReachable(state):
         (state, deque(), getDistanceToNearestTarget(state, set(state.snake.body)))
     )
 
-    while priorityQueue and len(priorityQueue) <= 48:
+    while priorityQueue and len(priorityQueue) <= 32:
 
         state, tail, _ = priorityQueue.popleft()
 
         for turn in Turn:
 
-            _1 = state.snake.body[-1]
+            oldTail = state.snake.body[-1]
 
             newState = state if turn == Turn.RIGHT else copyGameState(state)
             if not moveSnake(newState, turn):
                 continue
 
-            if _1 not in newTail:
-                newTail = tail if turn == Turn.RIGHT else tail.copy()
-                newTail.appendleft(_1)
+            newTail = tail
+            if oldTail not in newTail:
+                newTail = newTail if turn == Turn.RIGHT else newTail.copy()
+                newTail.appendleft(oldTail)
 
             if newState.snake.head in newTail:
                 return True
